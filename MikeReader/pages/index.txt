@@ -1,8 +1,0 @@
-<template>
-    <div>
-      <div class=" md:text-[80px] sm:text-[40px]">jhsdvblk I put</div>
-    </div>
-    <div>
-      <div class=" md:text-red-800 sm:text-sky-500">I eat dsfkjvb</div>
-    </div>
-  </template>

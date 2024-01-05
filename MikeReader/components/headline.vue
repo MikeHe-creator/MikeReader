@@ -1,26 +1,39 @@
 <template>
     <div>
-         <div class=" lg:hidden sm:block bg-blue-600 bg-opacity-20 "><p class="text-white text-[40px] ml-[10px] cursor-pointer" @click="touchevent">≡</p></div>
+      <div class=" lg:hidden sm:block"><p class="text-white text-[40px] ml-[10px] cursor-pointer" @click="touchevent">≡</p></div>
     </div>
-        <div class=" hidden lg:flex">
-            <NuxtLink to="BookReader" class="ml-[10px] text-[20px] text-white">📚BookReader</NuxtLink>
-            <NuxtLink to="videoplayer" class="ml-[10px] text-[20px] text-white">💿Videoplayer</NuxtLink>
-            <NuxtLink to="CDplayer" class="ml-[10px] text-[20px] text-white">🎶CDplayer</NuxtLink>
-            <NuxtLink to="ReaderCollect" class="ml-[10px] text-[20px] text-white">💾ReaderCollect</NuxtLink>
-            <NuxtLink to="history" class="ml-[10px] text-[20px] text-white">⏱History</NuxtLink>
-        </div>
-        <!--Only for small screens-->
-        <div v-if="isMenuVisible" class="bg-blue-600 bg-opacity-20 z-10 p-4 backdrop-blur-lg fixed w-1/2 h-full flex-col ">
-            <NuxtLink to="BookReader" class="ml-2 text-white text-base m-1">📚BookReader</NuxtLink><br>      
-           <NuxtLink to="videoplayer" class="ml-2 text-white text-base m-1">💿Videoplayer</NuxtLink><br>
-           <NuxtLink to="CDplayer" class="ml-2 text-white text-base m-1">🎶CDplayer</NuxtLink><br>
-           <NuxtLink to="ReaderCollect" class="ml-2 text-white text-base m-1">💾ReaderCollect</NuxtLink><br>
-           <NuxtLink to="history" class="ml-2 text-white text-base m-1">⏱History</NuxtLink>
-        </div>
+    <div class=" hidden lg:flex">
+      <NuxtLink to="/" class="ml-[10px] text-[20px] text-white mt-[10px]">🏠Home</NuxtLink>
+      <NuxtLink to="BookReader" class="ml-[10px] text-[20px] text-white mt-[10px]">📚BookReader</NuxtLink>
+      <NuxtLink to="videoplayer" class="ml-[10px] text-[20px] text-white mt-[10px]">💿Videoplayer</NuxtLink>
+      <NuxtLink to="CDplayer" class="ml-[10px] text-[20px] text-white mt-[10px]">🎶CDplayer</NuxtLink>
+      <NuxtLink to="ReaderCollect" class="ml-[10px] text-[20px] text-white mt-[10px]">💾ReaderCollect</NuxtLink>
+      <NuxtLink to="history" class="ml-[10px] text-[20px] text-white mt-[10px]">⏱History</NuxtLink>
+      <div class=" ml-[800px] bg-blue-800 rounded-[10px] w-[100px] mt-[10px] h-[30px]">
+        <NuxtLink to="register" class="text-[20px] text-white text-center ml-[15px]">register</NuxtLink>
+      </div>
+      <div class=" bg-blue-800 m-3 rounded-[10px] w-[100px] mt-[10px] h-[30px]">
+        <NuxtLink to="login" class="text-[20px] text-white text-center ml-[25px]">login</NuxtLink>
+      </div>
+      <div>
+        <img src="">
+      </div>
+    </div>
+    <!--Only for small screens-->
+    <div v-if="isMenuVisible" class="bg-blue-600 bg-opacity-20 z-10 p-4 backdrop-blur-lg fixed w-1/2 h-screen flex flex-col top-0 left-0 bg-cover">
+      <div><p class="text-white text-[40px] ml-[10px] cursor-pointer" @click="touchevent">≡</p></div>
+      <NuxtLink to="/" class="ml-2 text-white text-base m-0.5">🏠Home</NuxtLink><br>
+      <NuxtLink to="BookReader" class="ml-2 text-white text-base m-o.5">📚BookReader</NuxtLink><br>      
+      <NuxtLink to="videoplayer" class="ml-2 text-white text-base m-0.5">💿Videoplayer</NuxtLink><br>
+      <NuxtLink to="CDplayer" class="ml-2 text-white text-base m-0.5">🎶CDplayer</NuxtLink><br>
+      <NuxtLink to="ReaderCollect" class="ml-2 text-white text-base m-0.5">💾ReaderCollect</NuxtLink><br>
+      <NuxtLink to="history" class="ml-2 text-white text-base m-0.5">⏱History</NuxtLink>
+      <NuxtLink to="register" class="text-[20px] text-white font-bold text-center ml-[15px] mt-[60px] border-[2px] rounded-[10px] m-0.5">register</NuxtLink>
+      <NuxtLink to="login" class="text-[20px] text-white font-bold text-center ml-[15px] mt-[20px] border-[2px] rounded-[10px] m-0.5">login</NuxtLink>
+    </div>
+    
 </template>
 <script setup>
-import { ref } from "vue";
-const localpop=ref();
 const isMenuVisible = ref(false);
 const touchevent = () => {
   isMenuVisible.value = !isMenuVisible.value;

@@ -6,9 +6,9 @@
       </div>
       <div>
         <span>
-            <img alt="Books on the desks" src="./icons/Ali_Dream_books_desk_3D_icon_0_6f507acb-3f8b-45da-9d0f-9d671cda3918 (1).png" class="w-[650px] lg:ml-[200px] lg:mt-[50px]"> 
+            <img alt="Books on the desks" src="./icons/Ali_Dream_books_desk_3D_icon_0_6f507acb-3f8b-45da-9d0f-9d671cda3918 (1).png" class="w-[650px] lg:ml-[5%] lg:mt-[0.5%]"> 
         </span>
-        <span class=" absolute cursor-pointer lg:ml-[900px] lg:-mt-[540px] ml-[40px]">
+        <span class=" absolute cursor-pointer lg:ml-[60%] lg:-mt-[540px] ml-[40px]">
             <button class=" justify-center bg-amber-600 text-[25px] lg:text-[40px] m-0.25 rounded-[10px] text-center w-[300px] lg:w-[500px] flex" @click="local">
                 <p>📁Local Resource</p></button><br>
             <button class=" flex items-center justify-center bg-white text-[20px] lg:text-[40px] m-0.25 rounded-[10px] text-center w-[300px] lg:w-[500px]">

@@ -16,9 +16,9 @@
         </div>
     </div>
     <div class="flex">
-        <button ref="showbutton1" @click="scanFolder1" class=" absolute lg:mt-[-50%] mt-[-200%] font-bold ml-[20px] bg-orange-500 border-[3px] rounded-[10px] border-orange-500 hover:border-orange-800 lg:p-4 p-2 block">Upload local book libary</button>
-        <button ref="showbutton2" @click="scanFolder2" class=" absolute lg:mt-[-50%] mt-[-200%] font-bold ml-[20px] bg-green-500 border-[3px] rounded-[10px] border-green-500 hover:border-green-800 lg:p-4 p-2 hidden">Upload local video libary</button>
-        <button ref="showbutton3" @click="scanFolder3" class=" absolute lg:mt-[-50%] mt-[-200%] font-bold ml-[20px] bg-purple-500 border-[3px] rounded-[10px] border-purple-500 hover:border-purple-800 lg:p-4 p-2 hidden">Upload local music libary</button>
+        <button ref="showbutton1" @click="scanFolder1" class=" absolute lg:mt-[-48%] mt-[-200%] font-bold ml-[20px] bg-orange-500 border-[3px] rounded-[10px] border-orange-500 hover:border-orange-800 lg:p-4 p-2 block">Upload local book libary</button>
+        <button ref="showbutton2" @click="scanFolder2" class=" absolute lg:mt-[-48%] mt-[-200%] font-bold ml-[20px] bg-green-500 border-[3px] rounded-[10px] border-green-500 hover:border-green-800 lg:p-4 p-2 hidden">Upload local video libary</button>
+        <button ref="showbutton3" @click="scanFolder3" class=" absolute lg:mt-[-48%] mt-[-200%] font-bold ml-[20px] bg-purple-500 border-[3px] rounded-[10px] border-purple-500 hover:border-purple-800 lg:p-4 p-2 hidden">Upload local music libary</button>
         <div ref="showbutton4">
             <form name="webcollection">
                 <input>

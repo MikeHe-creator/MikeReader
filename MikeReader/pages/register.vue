@@ -1,38 +1,40 @@
 <template>
-    <img src="./icons/Ali_Dream_cartoon_books_in_desk_cute.png" class="object-cover w-full h-full min-h-screen relative -z-20">
-    <div class="bg-white bg-opacity-5 backdrop-blur-[10px] z-3 fixed mt-[-90%] ml-[2vw] p-7 w-[96vw] lg:w-[40vw] lg:mt-[-80vw] lg:ml-[27vw] flex flex-col">
-        <form name="reginfo" >
-            <div class="flex items-center space-between mb-2 ml-[7vw] mt-[3vw]">
-                <p>User Name:</p>
-                <input type="text" placeholder="User Name" class="lg:ml-[8vw] ml-[12.6vw]">
-            </div> 
-            <div class="flex items-center space-between mb-2 ml-[7vw]">
-                <p>Email:</p>
-                <input type="email" placeholder="Email" class="lg:ml-[10.2vw] ml-[17.4vw]">
-            </div>
-            <div class="flex items-center space-between mb-2 ml-[7vw]">
-                <p>Phone Number:</p>
-                <input type="tel" placeholder="Phone Number" class="lg:ml-[6.2vw] ml-[5.4vw]">
-            </div>
-            <div class="flex items-center space-between mb-2 ml-[7vw]">
-                <p>Password:</p>
-                <input type="password" placeholder="Password" class="lg:ml-[8.6vw] ml-[10vw]">
-            </div>
-            <div class="flex items-center space-between ml-[7vw]">
-                <p>Rewrite Password:</p>
-                <input type="password" placeholder="Rewrite Password" class="lg:ml-[5.4vw] ml-[0vw]">
-            </div>
-        </form>
-        <div>
-            <div class=" bg-black border-[0.05vw] lg:w-[12vw] w-[33vw] mt-[2vw] ml-[2vw] inline-block"></div>
-            <div class=" inline-block ml-[2vw]"> OR </div>
-            <div class=" bg-black border-[0.05vw] lg:w-[12vw] w-[33vw] mt-[2vw] ml-[2vw] inline-block"></div>
-        </div>
-        <div>
-            <img>
-        </div>
+    <div class="relative min-h-screen">
+        <img src="./icons/Ali_Dream_cartoon_books_in_desk_cute.png" class="object-cover w-full h-full absolute top-0 left-0 z-[-20]">
     </div>
-    <div>
-        <img src="./icons/male-avatar-4942266-4116910.gif" class=" fixed z-5 lg:mt-[-89vw] lg:ml-[40vw] mt-[-118%] ml-[30vw] size-[40vw] lg:size-[13vw]">
-    </div>
-</template>
+    <div class="absolute inset-0">
+        <NuxtLink to="/" class=" absolute top-0 left-0"><p class=" text-white text-[1.2em] font-bold">&lt;&lt;BACK</p></NuxtLink>      
+        <div class=" flex flex-col justify-center items-center min-h-screen">
+            <div class=" bg-white bg-opacity-5 backdrop-blur-[10px] z-3 ">
+                <form class="flex flex-col  lg:grid-flex-row items-start text-center p-8 " name="loginlist">
+                    <p>User Name:</p>
+                    <input type="text" placeholder="User Name" class="ml-[0.1em]">
+                    <p>Email:</p>
+                    <input type="email" placeholder="Email" class="ml-[0.1em]">
+                    <p>Phone Number:</p>
+                    <input type="tel" placeholder="Phone Number" class="ml-[0.1em]">
+                    <p>Password:</p>
+                    <input type="password" placeholder="Password" class="ml-[0.1em]">
+                    <p>Rewrite Password:</p>
+                    <input type="password" placeholder="Rewrite Password" class="ml-[0.1em]">
+                </form>
+                <p class=" min-w-[10px] whitespace-pre-wrap text-white">By creating an account, you agree to our terms and conditions and privacy policy.</p>
+                <div class=" ml-[0.8em]">
+                    <div class=" bg-black border-[0.05em] inline-block min-w-[6em] "></div>
+                    <div class=" inline-block ml-[0.05em]"> OR </div>
+                    <div class=" bg-black border-[0.05em] inline-block min-w-[6em] ml-1"></div>
+                </div>
+                <div class="flex justify-center items-center">
+                    <img src="./icons/svg/icons8-google.svg">
+                    <img src="./icons/svg/icons8-microsoft.svg">
+                    <img src="./icons/svg/icons8-facebook.svg">
+                    <img src="./icons/svg/icons8-baidu.svg">
+                    <img src="./icons/svg/tencent-qq-logo-15957.svg">
+                    <img src="./icons/svg/icons8-wechat.svg">
+                </div>
+                <div class=" flex justify-end text-white"> NEXT STEP>></div>
+            </div>
+            
+        </div>
+    </div>        
+</template>  

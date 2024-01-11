@@ -1,32 +1,30 @@
 <template>
-    <div class=" bg-gradient-to-r to-purple-500 from-red-300">
-        <Headline></Headline>
-        <p class=" mr-auto text-white opacity-10 ">ReaderCollect</p>
-        <div class=" flex font-bold mt-[2%] ml-[5%] lg:ml-[2%] space-x-1 lg:space-x-3">
-            <div class=" bg-orange-500 w-[90px] lg:w-[140px] text-center lg:text-[30px] cursor-pointer" @click="booklist1">Booklist</div>
-            <div class=" bg-green-500 w-[80px] lg:w-[140px] text-center lg:text-[30px] cursor-pointer" @click="videolist1">Videolist</div>
-            <div class=" bg-purple-500 w-[100px] lg:w-[150px]  text-center lg:text-[30px] cursor-pointer" @click="musiclist1">Muisclist</div>
-            <div class=" bg-amber-500 w-[100px] lg:w-[160px]  text-center lg:text-[30px] cursor-pointer" @click="collection1">Collection</div>
-        </div>
+    <div class="relative h-screen overflow-hidden">
+        <p class="text-gray-300 lg:text-[300px] text-[270px] ml-[300px] lg:mt-[400px] sm:mt-[300px] rotate-90 lg:rotate-0 -z-10 relative">ReaderCollect</p>
     </div>
-    <div class=" bg-orange-500 h-2" ref="colortie"></div>
-    <div>
-        <div class="relative h-screen overflow-hidden">
-            <p class="text-gray-300 lg:text-[300px] text-[270px] ml-[300px] lg:mt-[400px] sm:mt-[300px] rotate-90 lg:rotate-0 -z-10 relative">ReaderCollect</p>
+    <div class="absolute inset-0">
+        <div class=" bg-gradient-to-r to-purple-500 from-red-300">
+            <Headline></Headline>
+            <div class=" grid grid-flow-col auto-cols-min mt-[0.5em] lg:mt-[3em] ml-[0.3em]">
+               <div class=" bg-orange-500 text-center lg:text-[30px] cursor-pointer" @click="booklist1">Booklist</div>
+               <div class=" bg-green-500 min-w-[0.2em] lg:w-[140px] text-center lg:text-[30px] cursor-pointer" @click="videolist1">Videolist</div>
+               <div class=" bg-purple-500 min-w-[0.2em] lg:w-[150px]  text-center lg:text-[30px] cursor-pointer" @click="musiclist1">Muisclist</div>
+               <div class=" bg-amber-500 min-w-[0.2em] lg:w-[160px]  text-center lg:text-[30px] cursor-pointer" @click="collection1">Collection</div>
+            </div>
         </div>
-    </div>
-    <div class="flex">
-        <button ref="showbutton1" @click="scanFolder1" class=" absolute lg:mt-[-48%] mt-[-200%] font-bold ml-[20px] bg-orange-500 border-[3px] rounded-[10px] border-orange-500 hover:border-orange-800 lg:p-4 p-2 block">Upload local book libary</button>
-        <button ref="showbutton2" @click="scanFolder2" class=" absolute lg:mt-[-48%] mt-[-200%] font-bold ml-[20px] bg-green-500 border-[3px] rounded-[10px] border-green-500 hover:border-green-800 lg:p-4 p-2 hidden">Upload local video libary</button>
-        <button ref="showbutton3" @click="scanFolder3" class=" absolute lg:mt-[-48%] mt-[-200%] font-bold ml-[20px] bg-purple-500 border-[3px] rounded-[10px] border-purple-500 hover:border-purple-800 lg:p-4 p-2 hidden">Upload local music libary</button>
-        <div ref="showbutton4">
-            <form name="webcollection">
-                <input>
-            </form>
+        <div class=" bg-orange-500 h-2" ref="colortie"></div>
+        <div class="flex">
+            <button ref="showbutton1" @click="scanFolder1" class=" absolute mt-[0.5em] font-bold ml-[0.5em] bg-orange-500 border-[3px] rounded-[10px] border-orange-500 hover:border-orange-800 lg:p-4 p-2 block z-0">Upload local book library</button>
+            <button ref="showbutton2" @click="scanFolder2" class=" absolute mt-[0.5em] font-bold ml-[0.5em] bg-green-500 border-[3px] rounded-[10px] border-green-500 hover:border-green-800 lg:p-4 p-2 hidden z-0">Upload local video libary</button>
+            <button ref="showbutton3" @click="scanFolder3" class=" absolute mt-[0.5em] font-bold ml-[0.5em] bg-purple-500 border-[3px] rounded-[10px] border-purple-500 hover:border-purple-800 lg:p-4 p-2 hidden z-0">Upload local music libary</button>
+            <div ref="showbutton4">
+                <form name="webcollection">
+                   <input>
+                   </form>
+            </div>
         </div>
     </div>
 </template>
-
 <script setup>
 import { ref } from 'vue';
 const colortie=ref();

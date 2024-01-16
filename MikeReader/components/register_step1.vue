@@ -75,7 +75,7 @@ const phonenum=ref("");
 const password=ref("");
 const showPassword = ref(false);
 const repassword=ref("");
-const showPassword2=ref(false);
+const showPassword2=ref(false); 
 
 
 onMounted(() => {
@@ -100,6 +100,14 @@ function validateForm(){
         alert('Please enter correct phone number!');
         return false;
     }
+    
+
+    if(!validatePassword(password.value) || password.value.length<6 ){
+        alert("Please enter the correct password, including uppercase and lowercase letters + numbers + valid characters. The password should not be less than 6 characters!")
+    };
+    if(!validatePassword(repassword) || repassword.value.length<6 ){
+        alert("Please enter the correct password, including uppercase and lowercase letters + numbers + valid characters. The password should not be less than 6 characters!")
+    };
 
     function validateEmail(email) {
         var emailRegex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
@@ -110,6 +118,10 @@ function validateForm(){
         return phoneRegex.test(phone);
     }
 
+    function validatePassword (password){
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+        return passwordRegex.test(password);
+    };
 };
 
 function displayeye() {
@@ -118,4 +130,5 @@ function displayeye() {
 function displayrepas(){
   showPassword2.value = !showPassword2.value;
 }
+
 </script>

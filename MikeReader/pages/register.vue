@@ -7,6 +7,7 @@
         <div class=" flex flex-col justify-center items-center min-h-screen">
             <div class=" bg-white bg-opacity-5 backdrop-blur-[10px] z-3 items-center win-w-[10em]">
                 <RegisterStep1></RegisterStep1>
+                <RegisterStep2></RegisterStep2>
             </div>
         </div>
     </div>        

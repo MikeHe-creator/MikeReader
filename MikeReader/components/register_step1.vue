@@ -1,4 +1,5 @@
 <template>
+<div :style="{ display: Shouldblock }">
     <form class="flex flex-col  lg:grid lg:grid-cols-2 lg:gap-2 lg:items-start text-center p-8 " name="loginlist">
         <!--user name-->
         <label class=" flex justify-start text-white">User Name:</label>
@@ -31,7 +32,7 @@
         </div>
     </form>
     <div>
-        <p class="ml-[2em] lg:max-w-[40ch] max-w-[26ch] whitespace-pre-wrap text-white"><input type="checkbox">I agree with our terms and conditions and privacy policy.</p> 
+        <p class="ml-[2em] lg:max-w-[40ch] max-w-[26ch] whitespace-pre-wrap text-white"><input type="checkbox" v-model="agreeCheckbox">I agree with our terms and conditions and privacy policy.</p> 
     </div>
     <div class="flex justify-center">
         <div class="ml-[0.8em]">
@@ -49,6 +50,7 @@
         <img src="./svg/icons8-wechat.svg">
     </div>
     <div class=" flex justify-end text-white cursor-pointer" @click="validateForm"> NEXT STEP>></div>
+</div>
 </template>
 <script setup>
 useHead({
@@ -76,7 +78,9 @@ const password=ref("");
 const showPassword = ref(false);
 const repassword=ref("");
 const showPassword2=ref(false); 
-
+const agreeCheckbox=ref(false);
+const Shouldblock = ref('block'); 
+let notalert=0;
 
 onMounted(() => {
    window.intlTelInput(phoneInput.value, {
@@ -89,25 +93,43 @@ function validateForm(){
     if (username.value=== "" || email.value === "" || phonenum.value === "" || password.value === "" || repassword.value === "") {
         alert('Please write all blanks!');
         return false;
+    }else{
+        notalert+=1;
     };
     var emailvalue=email.value;
     if (!validateEmail(emailvalue)) {
         alert('Please input the correct email adress!');
         return false;
+    }else{
+        notalert+=1;
     };
     var phonenumval=phonenum.value
-    if (!validatePhone(phonenumval)||phonenumval.length<4 || phonenumval.length>11 ) {
+    if (!validatePhone(phonenumval) && phonenumval.length<4 || phonenumval.length>11 ) {
         alert('Please enter correct phone number!');
         return false;
+    }else{
+        notalert+=1;
     }
-    
 
-    if(!validatePassword(password.value) || password.value.length<6 ){
+    if(!validatePassword(password.value) && password.value.length<6 ){
         alert("Please enter the correct password, including uppercase and lowercase letters + numbers + valid characters. The password should not be less than 6 characters!")
+    }else{
+        notalert+=1;
     };
-    if(!validatePassword(repassword) || repassword.value.length<6 ){
-        alert("Please enter the correct password, including uppercase and lowercase letters + numbers + valid characters. The password should not be less than 6 characters!")
+    if(!validatePassword(repassword.value) && repassword.value.length<6 || password.value!==repassword.value ){
+        alert("Please enter again the correct password, including uppercase and lowercase letters + numbers + valid characters. The password should not be less than 6 characters and the password and the rewritten password are same!")
+    }else{
+        notalert+=1;
     };
+    if (!agreeCheckbox.value) {
+        alert("If you want to register our web, please agree with our terms and conditions and privacy policy. ")
+    }else{
+        notalert+=1;
+    }
+
+    if (notalert===6){
+        Shouldblock.value = "none";
+    }
 
     function validateEmail(email) {
         var emailRegex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
@@ -124,11 +146,12 @@ function validateForm(){
     };
 };
 
+
+
 function displayeye() {
   showPassword.value = !showPassword.value;
 }
 function displayrepas(){
   showPassword2.value = !showPassword2.value;
 }
-
 </script>

@@ -79,7 +79,7 @@ const showPassword = ref(false);
 const repassword=ref("");
 const showPassword2=ref(false); 
 const agreeCheckbox=ref(false);
-const Shouldblock = ref('block'); 
+const Shouldblock = ref('none'); 
 let notalert=0;
 
 onMounted(() => {

@@ -8,7 +8,9 @@
             <div class=" bg-white bg-opacity-5 backdrop-blur-[10px] z-3 items-center win-w-[10em]">
                 <RegisterStep1></RegisterStep1>
                 <RegisterStep2></RegisterStep2>
+                <div class=" text-white font-bold">Already have an account? <NuxtLink to="login" class=" text-blue-800 font-bold">Login</NuxtLink></div>
             </div>
+            
         </div>
     </div>        
 </template>

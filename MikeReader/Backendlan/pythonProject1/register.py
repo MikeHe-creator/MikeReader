@@ -1,12 +1,16 @@
 from flask import Flask, request, jsonify, abort, g
 from flask_cors import CORS
-import sqlite3
+import sqlite3,os
 import hashlib
 
 app = Flask(__name__)
 CORS(app)
 
-DATABASE = '/home/user/data/user_data.db'
+DATABASE = '/home/mikereader/user/data/user_data.db'
+database_directory = os.path.dirname(DATABASE)
+
+if not os.path.exists(database_directory):
+    os.makedirs(database_directory)
 
 def get_db():
     db = getattr(g, '_database', None)

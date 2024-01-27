@@ -6,7 +6,7 @@ import hashlib
 app = Flask(__name__)
 CORS(app)
 
-DATABASE = '/home/user/data/user_data.db'
+DATABASE = '/home/mikereader/user/data/user_data.db'
 
 def get_db():
     db = getattr(g, '_database', None)

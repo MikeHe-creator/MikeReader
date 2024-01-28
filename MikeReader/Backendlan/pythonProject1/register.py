@@ -12,6 +12,7 @@ database_directory = os.path.dirname(DATABASE)
 if not os.path.exists(database_directory):
     os.makedirs(database_directory)
 
+
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:

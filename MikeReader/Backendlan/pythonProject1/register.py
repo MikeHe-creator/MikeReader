@@ -65,7 +65,8 @@ def register_user():
     return jsonify(response), 200
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    init_db()  # 在运行应用程序之前初始化数据库
+    app.run(debug=True)
 
 
 

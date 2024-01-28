@@ -103,7 +103,7 @@ function validateForm(){
             password: password.value
         };
         console.log(userdata);
-        axios.post('http://localhost:5000/register', userdata)
+        axios.post('http://127.0.0.1:5000/register', userdata)
         .then(response => {
             console.log(response.data);
         })

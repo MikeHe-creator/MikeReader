@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify, abort, g
 from flask_cors import CORS
-import os
 import hashlib
 import mysql.connector
 
@@ -93,8 +92,6 @@ def register_user():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
-
-
 
 
 

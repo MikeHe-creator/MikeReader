@@ -1,42 +1,69 @@
 from flask import Flask, request, jsonify, abort, g
 from flask_cors import CORS
-import sqlite3
 import os
 import hashlib
+import mysql.connector
 
 app = Flask(__name__)
 CORS(app)
 
-DATABASE = '/home/mikereader/user/data/user_data.db'
-database_directory = os.path.dirname(DATABASE)
+DATABASE_CONFIG = {
+    'host': 'localhost',
+    'user': 'root2',
+    'password': 'Mysql123',
+    'database': 'mydatabase'
+}
 
-if not os.path.exists(database_directory):
-    os.makedirs(database_directory)
+def create_database():
+    try:
+        conn = mysql.connector.connect(
+            host=DATABASE_CONFIG['host'],
+            user=DATABASE_CONFIG['user'],
+            password=DATABASE_CONFIG['password']
+        )
+        cursor = conn.cursor()
+        cursor.execute("CREATE DATABASE IF NOT EXISTS mydatabase")
+        conn.commit()
+        print("Database 'mydatabase' created successfully")
+    except Exception as e:
+        print("Error creating database:", e)
+    finally:
+        cursor.close()
+        conn.close()
+
+def create_table():
+    try:
+        conn = mysql.connector.connect(**DATABASE_CONFIG)
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                username VARCHAR(255) NOT NULL,
+                email VARCHAR(255) NOT NULL,
+                password VARCHAR(255) NOT NULL
+            )
+        """)
+        conn.commit()
+        print("Table 'users' created successfully")
+    except Exception as e:
+        print("Error creating table:", e)
+    finally:
+        cursor.close()
+        conn.close()
 
 def get_db():
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = sqlite3.connect(DATABASE)
-    return db
-
-def init_db():
-    if not os.path.exists(DATABASE):
-        with app.app_context():
-            db = get_db()
-            cursor = db.cursor()
-            cursor.execute('''CREATE TABLE users (
-                                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                username TEXT NOT NULL,
-                                email TEXT NOT NULL,
-                                password TEXT NOT NULL
-                            )''')
-            db.commit()
+    create_database()  # 创建数据库
+    create_table()     # 创建数据表
+    conn = getattr(g, '_database', None)
+    if conn is None:
+        conn = g._database = mysql.connector.connect(**DATABASE_CONFIG)
+    return conn
 
 @app.teardown_appcontext
 def close_connection(exception):
-    db = getattr(g, '_database', None)
-    if db is not None:
-        db.close()
+    conn = getattr(g, '_database', None)
+    if conn is not None:
+        conn.close()
 
 @app.route('/register', methods=['POST'])
 def register_user():
@@ -51,11 +78,11 @@ def register_user():
     hashed_password = hashlib.sha256(user_data['password'].encode()).hexdigest()
 
     try:
-        db = get_db()
-        cursor = db.cursor()
-        cursor.execute('INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO users (username, email, password) VALUES (%s, %s, %s)',
                        (user_data['username'], user_data['email'], hashed_password))
-        db.commit()
+        conn.commit()
         print("Data inserted into database successfully")
     except Exception as e:
         print("Error inserting data into database:", e)
@@ -65,8 +92,8 @@ def register_user():
     return jsonify(response), 200
 
 if __name__ == '__main__':
-    init_db()  # 在运行应用程序之前初始化数据库
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)
+
 
 
 

@@ -7,12 +7,12 @@
     "module": true,
     "resourceType": "script"
   },
-  "D:/document file/JavaScript/JavaScrpit/vuep01/MikeReader/node_modules/nuxt/dist/app/entry.js": {
+  "E:/document file/JavaScript/JavaScrpit/vuep01/MikeReader/node_modules/nuxt/dist/app/entry.js": {
     "resourceType": "script",
     "module": true,
     "prefetch": true,
     "preload": true,
     "isEntry": true,
-    "file": "D:/document file/JavaScript/JavaScrpit/vuep01/MikeReader/node_modules/nuxt/dist/app/entry.js"
+    "file": "E:/document file/JavaScript/JavaScrpit/vuep01/MikeReader/node_modules/nuxt/dist/app/entry.js"
   }
 }

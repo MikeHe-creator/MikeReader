@@ -52,6 +52,8 @@
 import { ref} from 'vue';
 import axios from 'axios';
 
+const { emit } = getCurrentInstance();
+
 const username=ref("");
 const email=ref("");
 const password=ref("");
@@ -96,6 +98,7 @@ function validateForm(){
 
     if (notalert===5){
         Shouldblock.value = "none";
+        emit('step1Success');
         //存储用户注册信息
         const userdata={
             username: username.value,
@@ -106,11 +109,19 @@ function validateForm(){
         axios.post('http://38.242.159.56:5000/register', userdata)
         .then(response => {
             console.log(response.data);
-        })
+         })
         .catch(error => {
             console.error('Error registering user:', error);
         })
         //验证码 
+        axios.post('http://38.242.159.56:5000/send_verification_code', { email: email.value })
+        .then(response => {
+            console.log("Verification code sent successfully");
+            emit('verificationCodeSent', response.data.code);
+        })
+        .catch(error => {
+            console.error('Error sending verification code:', error);
+        });
     };
 
     function validateEmail(email) {

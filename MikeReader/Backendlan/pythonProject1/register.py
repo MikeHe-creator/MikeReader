@@ -1,7 +1,10 @@
+import string
+import secrets
+import hashlib
+import smtplib
+import mysql.connector
 from flask import Flask, request, jsonify, abort, g
 from flask_cors import CORS
-import hashlib, smtplib, secrets
-import mysql.connector
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -14,6 +17,25 @@ DATABASE_CONFIG = {
     'password': 'Mysql123',
     'database': 'mydatabase'
 }
+
+# 生成userID的函数
+def generate_user_id():
+    characters = string.ascii_letters + string.digits
+    return ''.join(secrets.choice(characters) for _ in range(11))
+
+# 检查userID是否唯一的函数
+def is_user_id_unique(user_id):
+    try:
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute('SELECT COUNT(*) FROM users WHERE user_id = %s', (user_id,))
+        count = cursor.fetchone()[0]
+        return count == 0
+    except Exception as e:
+        print("Error checking user ID uniqueness:", e)
+        return False
+    finally:
+        cursor.close()
 
 # 全局变量用于存储验证码
 verification_code = None
@@ -90,15 +112,19 @@ def create_table():
     try:
         conn = mysql.connector.connect(**DATABASE_CONFIG)
         cursor = conn.cursor()
+
+        # 创建 users 表，如果不存在
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id VARCHAR(11) UNIQUE,
                 username VARCHAR(255) NOT NULL,
                 email VARCHAR(255) NOT NULL,
                 password VARCHAR(255) NOT NULL
             )
         """)
         conn.commit()
+
         print("Table 'users' created successfully")
     except Exception as e:
         print("Error creating table:", e)
@@ -132,11 +158,16 @@ def register_user():
 
     hashed_password = hashlib.sha256(user_data['password'].encode()).hexdigest()
 
+    # 生成唯一的userID
+    user_id = generate_user_id()
+    while not is_user_id_unique(user_id):
+        user_id = generate_user_id()
+
     try:
         conn = get_db()
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO users (username, email, password) VALUES (%s, %s, %s)',
-                       (user_data['username'], user_data['email'], hashed_password))
+        cursor.execute('INSERT INTO users (user_id, username, email, password) VALUES (%s, %s, %s, %s)',
+                       (user_id, user_data['username'], user_data['email'], hashed_password))
         conn.commit()
         print("Data inserted into database successfully")
     except Exception as e:
@@ -148,4 +179,3 @@ def register_user():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
-

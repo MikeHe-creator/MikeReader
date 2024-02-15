@@ -8,6 +8,7 @@
       <div class=" bg-white bg-opacity-5 backdrop-blur-[10px] z-3 items-center win-w-[10em]">
         <RegisterStep1 @step1Success="showStep2"></RegisterStep1>
         <RegisterStep2 v-if="showComponent2"></RegisterStep2> <!-- 这里需要添加v-if判断 -->
+        <RegisterStep3></RegisterStep3>
         <div class=" text-white font-bold">Already have an account? <NuxtLink to="login" class=" text-blue-800 font-bold">Login</NuxtLink></div>
       </div>
     </div>
@@ -21,6 +22,5 @@ const showComponent2 = ref(false);
 
 function showStep2() {
   showComponent2.value = true;
-  console.log('showComponent2:', showComponent2.value);
 }
 </script>

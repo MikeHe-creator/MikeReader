@@ -64,83 +64,88 @@ const agreeCheckbox=ref(false);
 const Shouldblock = ref(' block'); 
 let notalert=0;
 
-
-function validateForm(){
-    if (username.value=== "" || email.value === "" || password.value === "" || repassword.value === "") {
+async function validateForm() {
+    if (username.value === "" || email.value === "" || password.value === "" || repassword.value === "") {
         alert('Please write all blanks!');
         return false;
-    }else{
-        notalert+=1;
-    };
-    var emailvalue=email.value;
-    if (!validateEmail(emailvalue)) {
-        alert('Please input the correct email adress!');
-        return false;
-    }else{
-        notalert+=1;
+    } else {
+        notalert += 1;
     };
 
-    if(!validatePassword(password.value) && password.value.length<6 ){
-        alert("Please enter the correct password, including uppercase and lowercase letters + numbers + valid characters. The password should not be less than 6 characters!")
-    }else{
-        notalert+=1;
+    var emailvalue = email.value;
+    if (!validateEmail(emailvalue)) {
+        alert('Please input the correct email address!');
+        return false;
+    } else {
+        notalert += 1;
     };
-    if(!validatePassword(repassword.value) && repassword.value.length<6 || password.value!==repassword.value ){
-        alert("Please enter again the correct password, including uppercase and lowercase letters + numbers + valid characters. The password should not be less than 6 characters and the password and the rewritten password are same!")
-    }else{
-        notalert+=1;
+
+    if (!validatePassword(password.value) && password.value.length < 6) {
+        alert("Please enter the correct password, including uppercase and lowercase letters + numbers + valid characters. The password should not be less than 6 characters!");
+    } else {
+        notalert += 1;
     };
+
+    if (!validatePassword(repassword.value) && repassword.value.length < 6 || password.value !== repassword.value) {
+        alert("Please enter again the correct password, including uppercase and lowercase letters + numbers + valid characters. The password should not be less than 6 characters and the password and the rewritten password are same!");
+    } else {
+        notalert += 1;
+    };
+
     if (!agreeCheckbox.value) {
         alert("If you want to register our web, please agree with our terms and conditions and privacy policy. ")
-    }else{
-        notalert+=1;
+    } else {
+        notalert += 1;
     }
 
-    if (notalert===5){
-        Shouldblock.value = "none";
-        emit('step1Success');
-        //存储用户注册信息
-        const userdata={
-            username: username.value,
-            email: email.value,
-            password: password.value
-        };
-        console.log(userdata);
-        axios.post('http://38.242.159.56:5000/register', userdata)
-        .then(response => {
-            console.log(response.data);
-         })
-        .catch(error => {
-            console.error('Error registering user:', error);
-        })
-        //验证码 
-        axios.post('http://38.242.159.56:5000/send_verification_code', { email: email.value })
-        .then(response => {
-            console.log("Verification code sent successfully");
-            emit('verificationCodeSent', response.data.code);
-        })
-        .catch(error => {
-            console.error('Error sending verification code:', error);
-        });
-    };
-
-    function validateEmail(email) {
-        var emailRegex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
-        return emailRegex.test(email);
-    };
-
-
-    function validatePassword (password){
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
-        return passwordRegex.test(password);
+    if (notalert === 5) {
+        // Check if email is already registered
+        try {
+            const response = await axios.get(`http://38.242.159.56:5000/check_email/${email.value}`);
+            if (response.data.exists) {
+                alert('This email is already registered. Please use a different email.');
+                return;
+            } else {
+                Shouldblock.value = "none";
+                emit('step1Success');
+                // Store user registration information
+                const userdata = {
+                    username: username.value,
+                    email: email.value,
+                    password: password.value
+                };
+                console.log(userdata);
+                // Register the user
+                await axios.post('http://38.242.159.56:5000/register', userdata);
+                console.log("User registered successfully");
+                // Send verification code
+                const verificationResponse = await axios.post('http://38.242.159.56:5000/send_verification_code', { email: email.value });
+                console.log("Verification code sent successfully");
+                emit('verificationCodeSent', verificationResponse.data.code);
+            }
+        } catch (error) {
+            console.error('Error registering user or sending verification code:', error);
+            alert('An error occurred. Please try again later.');
+        }
     };
 };
 
+function validateEmail(email) {
+    var emailRegex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+    return emailRegex.test(email);
+};
+
+function validatePassword(password) {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    return passwordRegex.test(password);
+};
 
 function displayeye() {
-  showPassword.value = !showPassword.value;
+    showPassword.value = !showPassword.value;
 }
-function displayrepas(){
-  showPassword2.value = !showPassword2.value;
+
+function displayrepas() {
+    showPassword2.value = !showPassword2.value;
 }
+
 </script>

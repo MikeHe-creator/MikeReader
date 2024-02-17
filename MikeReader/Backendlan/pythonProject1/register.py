@@ -18,6 +18,21 @@ DATABASE_CONFIG = {
     'database': 'mydatabase'
 }
 
+# 新增路由，用于检查邮箱是否已注册
+@app.route('/check_email/<email>', methods=['GET'])
+def check_email(email):
+    try:
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute('SELECT COUNT(*) FROM users WHERE email = %s', (email,))
+        count = cursor.fetchone()[0]
+        return jsonify({'exists': count > 0}), 200
+    except Exception as e:
+        print("Error checking email:", e)
+        abort(500, 'Failed to check email')
+    finally:
+        cursor.close()
+
 # 生成userID的函数
 def generate_user_id():
     characters = string.ascii_letters + string.digits

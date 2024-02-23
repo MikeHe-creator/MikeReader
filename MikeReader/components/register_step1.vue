@@ -37,14 +37,7 @@
             <div class="bg-black border-[0.05em] inline-block min-w-[6em] ml-1"></div>
         </div>
     </div>
-    <div class="flex justify-center items-center">
-        <img src="./svg/icons8-google.svg">
-        <img src="./svg/icons8-microsoft.svg">
-        <img src="./svg/icons8-facebook.svg">
-        <img src="./svg/icons8-baidu.svg">
-        <img src="./svg/tencent-qq-logo-15957.svg">
-        <img src="./svg/icons8-wechat.svg">
-    </div>
+    <BythirdPartyRegister></BythirdPartyRegister>
     <div class=" flex justify-end text-white cursor-pointer" @click="validateForm"> NEXT STEP>></div>
 </div>
 </template>

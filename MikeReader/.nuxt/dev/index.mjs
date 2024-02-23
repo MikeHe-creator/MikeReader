@@ -6,6 +6,7 @@ import { parentPort, threadId } from 'node:worker_threads';
 import { defineEventHandler, handleCacheHeaders, splitCookiesString, isEvent, createEvent, getRequestHeader, eventHandler, setHeaders, sendRedirect, proxyRequest, setResponseHeader, send, getResponseStatus, setResponseStatus, setResponseHeaders, getRequestHeaders, createApp, createRouter as createRouter$1, toNodeListener, fetchWithEvent, lazyEventHandler, getQuery as getQuery$1, createError, getResponseStatusText } from 'file://E:/document%20file/JavaScript/JavaScrpit/vuep01/MikeReader/node_modules/h3/dist/index.mjs';
 import { getRequestDependencies, getPreloadLinks, getPrefetchLinks, createRenderer } from 'file://E:/document%20file/JavaScript/JavaScrpit/vuep01/MikeReader/node_modules/vue-bundle-renderer/dist/runtime.mjs';
 import { stringify, uneval } from 'file://E:/document%20file/JavaScript/JavaScrpit/vuep01/MikeReader/node_modules/devalue/index.js';
+import { parseURL, withoutBase, joinURL, getQuery, withQuery } from 'file://E:/document%20file/JavaScript/JavaScrpit/vuep01/MikeReader/node_modules/ufo/dist/index.mjs';
 import { renderToString } from 'file://E:/document%20file/JavaScript/JavaScrpit/vuep01/MikeReader/node_modules/vue/server-renderer/index.mjs';
 import { renderSSRHead } from 'file://E:/document%20file/JavaScript/JavaScrpit/vuep01/MikeReader/node_modules/@unhead/ssr/dist/index.mjs';
 import { createFetch as createFetch$1, Headers as Headers$1 } from 'file://E:/document%20file/JavaScript/JavaScrpit/vuep01/MikeReader/node_modules/ofetch/dist/node.mjs';
@@ -16,7 +17,6 @@ import { snakeCase } from 'file://E:/document%20file/JavaScript/JavaScrpit/vuep0
 import { klona } from 'file://E:/document%20file/JavaScript/JavaScrpit/vuep01/MikeReader/node_modules/klona/dist/index.mjs';
 import defu, { defuFn } from 'file://E:/document%20file/JavaScript/JavaScrpit/vuep01/MikeReader/node_modules/defu/dist/defu.mjs';
 import { hash } from 'file://E:/document%20file/JavaScript/JavaScrpit/vuep01/MikeReader/node_modules/ohash/dist/index.mjs';
-import { parseURL, withoutBase, joinURL, getQuery, withQuery } from 'file://E:/document%20file/JavaScript/JavaScrpit/vuep01/MikeReader/node_modules/ufo/dist/index.mjs';
 import { createStorage, prefixStorage } from 'file://E:/document%20file/JavaScript/JavaScrpit/vuep01/MikeReader/node_modules/unstorage/dist/index.mjs';
 import unstorage_47drivers_47fs from 'file://E:/document%20file/JavaScript/JavaScrpit/vuep01/MikeReader/node_modules/unstorage/drivers/fs.mjs';
 import { toRouteMatcher, createRouter } from 'file://E:/document%20file/JavaScript/JavaScrpit/vuep01/MikeReader/node_modules/radix3/dist/index.mjs';
@@ -618,6 +618,7 @@ const errorHandler = (async function errorhandler(error, event) {
     statusMessage,
     message,
     stack: statusCode !== 404 ? `<pre>${stack.map((i) => `<span class="stack${i.internal ? " internal" : ""}">${i.text}</span>`).join("\n")}</pre>` : "",
+    // TODO: check and validate error.data for serialisation into query
     data: error.data
   };
   if (error.unhandled || error.fatal) {
@@ -935,7 +936,6 @@ globalThis.__buildAssetsURL = buildAssetsURL;
 globalThis.__publicAssetsURL = publicAssetsURL;
 const getClientManifest = () => import('file://E:/document%20file/JavaScript/JavaScrpit/vuep01/MikeReader/.nuxt/dist/server/client.manifest.mjs').then((r) => r.default || r).then((r) => typeof r === "function" ? r() : r);
 const getServerEntry = () => import('file://E:/document%20file/JavaScript/JavaScrpit/vuep01/MikeReader/.nuxt/dist/server/server.mjs').then((r) => r.default || r);
-const getSSRStyles = lazyCachedFunction(() => Promise.resolve().then(function () { return styles$1; }).then((r) => r.default || r));
 const getSSRRenderer = lazyCachedFunction(async () => {
   const manifest = await getClientManifest();
   if (!manifest) {
@@ -1005,9 +1005,10 @@ const renderer = defineRenderHandler(async (event) => {
       statusMessage: "Page Not Found: /__nuxt_error"
     });
   }
+  const isRenderingIsland = false ;
   const islandContext = void 0;
   let url = ssrError?.url || islandContext?.url || event.path;
-  const isRenderingPayload = PAYLOAD_URL_RE.test(url) && !islandContext;
+  const isRenderingPayload = PAYLOAD_URL_RE.test(url) && !isRenderingIsland;
   if (isRenderingPayload) {
     url = url.substring(0, url.lastIndexOf("/")) || "/";
     event._path = url;
@@ -1018,18 +1019,27 @@ const renderer = defineRenderHandler(async (event) => {
     plugins: unheadPlugins
   });
   const headEntryOptions = { mode: "server" };
-  head.push(appHead, headEntryOptions);
+  {
+    head.push(appHead, headEntryOptions);
+  }
   const ssrContext = {
     url,
     event,
     runtimeConfig: useRuntimeConfig(),
-    noSSR: event.context.nuxt?.noSSR || routeOptions.ssr === false && !islandContext || (false),
+    noSSR: event.context.nuxt?.noSSR || routeOptions.ssr === false && !isRenderingIsland || (false),
     head,
     error: !!ssrError,
     nuxt: void 0,
     /* NuxtApp */
     payload: ssrError ? { error: ssrError } : {},
     _payloadReducers: {},
+    modules: /* @__PURE__ */ new Set(),
+    set _registeredComponents(value) {
+      this.modules = value;
+    },
+    get _registeredComponents() {
+      return this.modules;
+    },
     islandContext
   };
   const renderer = ssrContext.noSSR ? await getSPARenderer() : await getSSRRenderer();
@@ -1052,16 +1062,24 @@ const renderer = defineRenderHandler(async (event) => {
     const response2 = renderPayloadResponse(ssrContext);
     return response2;
   }
-  const inlinedStyles = Boolean(islandContext) ? await renderInlineStyles(ssrContext.modules ?? ssrContext._registeredComponents ?? []) : [];
+  const inlinedStyles = [];
   const NO_SCRIPTS = routeOptions.experimentalNoScripts;
   const { styles, scripts } = getRequestDependencies(ssrContext, renderer.rendererContext);
   head.push({ style: inlinedStyles });
-  head.push({
-    link: Object.values(styles).map(
-      (resource) => ({ rel: "stylesheet", href: renderer.rendererContext.buildAssetsURL(resource.file) })
-    )
-  }, headEntryOptions);
-  if (!NO_SCRIPTS) {
+  {
+    const link = [];
+    for (const style in styles) {
+      const resource = styles[style];
+      if ("inline" in getQuery(resource.file)) {
+        continue;
+      }
+      {
+        link.push({ rel: "stylesheet", href: renderer.rendererContext.buildAssetsURL(resource.file) });
+      }
+    }
+    head.push({ link }, headEntryOptions);
+  }
+  if (!NO_SCRIPTS && !isRenderingIsland) {
     head.push({
       link: getPreloadLinks(ssrContext, renderer.rendererContext)
     }, headEntryOptions);
@@ -1077,7 +1095,7 @@ const renderer = defineRenderHandler(async (event) => {
       tagPriority: "high"
     });
   }
-  if (!routeOptions.experimentalNoScripts) {
+  if (!routeOptions.experimentalNoScripts && !isRenderingIsland) {
     head.push({
       script: Object.values(scripts).map((resource) => ({
         type: resource.module ? "module" : null,
@@ -1089,10 +1107,10 @@ const renderer = defineRenderHandler(async (event) => {
   }
   const { headTags, bodyTags, bodyTagsOpen, htmlAttrs, bodyAttrs } = await renderSSRHead(head);
   const htmlContext = {
-    island: Boolean(islandContext),
-    htmlAttrs: [htmlAttrs],
+    island: isRenderingIsland,
+    htmlAttrs: htmlAttrs ? [htmlAttrs] : [],
     head: normalizeChunks([headTags, ssrContext.styles]),
-    bodyAttrs: [bodyAttrs],
+    bodyAttrs: bodyAttrs ? [bodyAttrs] : [],
     bodyPrepend: normalizeChunks([bodyTagsOpen, ssrContext.teleports?.body]),
     body: [_rendered.html],
     bodyAppend: [bodyTags]
@@ -1131,23 +1149,7 @@ function joinAttrs(chunks) {
   return chunks.join(" ");
 }
 function renderHTMLDocument(html) {
-  return `<!DOCTYPE html>
-<html ${joinAttrs(html.htmlAttrs)}>
-<head>${joinTags(html.head)}</head>
-<body ${joinAttrs(html.bodyAttrs)}>${joinTags(html.bodyPrepend)}${joinTags(html.body)}${joinTags(html.bodyAppend)}</body>
-</html>`;
-}
-async function renderInlineStyles(usedModules) {
-  const styleMap = await getSSRStyles();
-  const inlinedStyles = /* @__PURE__ */ new Set();
-  for (const mod of usedModules) {
-    if (mod in styleMap) {
-      for (const style of await styleMap[mod]()) {
-        inlinedStyles.add(style);
-      }
-    }
-  }
-  return Array.from(inlinedStyles).map((style) => ({ innerHTML: style }));
+  return `<!DOCTYPE html><html${joinAttrs(html.htmlAttrs)}><head>${joinTags(html.head)}</head><body${joinAttrs(html.bodyAttrs)}>${joinTags(html.bodyPrepend)}${joinTags(html.body)}${joinTags(html.bodyAppend)}</body></html>`;
 }
 function renderPayloadResponse(ssrContext) {
   return {
@@ -1189,13 +1191,6 @@ function splitPayload(ssrContext) {
 const renderer$1 = /*#__PURE__*/Object.freeze({
   __proto__: null,
   default: renderer
-});
-
-const styles = {};
-
-const styles$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: styles
 });
 
 const template = "";

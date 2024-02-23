@@ -20,11 +20,14 @@ def get_PDF():
     pdffile.save(filepath)
 
     outline = get_PDFoutline(filepath)
+    os.remove(filepath)
+    os.removedirs("temp")
     return jsonify({'outline': outline}), 200
 
 def get_PDFoutline(filepath):
     doc = fitz.open(filepath)
     outline = doc.get_toc()
+    doc.close()
     print("the result of outline", outline)
     return outline
 

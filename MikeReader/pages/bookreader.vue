@@ -30,7 +30,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class=" bg-black lg:w-[30em] xl:w-[40xl] 2xl:w-[50em] h-[40em] inline-block" ></div>
+                    <div class=" bg-black lg:w-[30em] xl:w-[40xl] 2xl:w-[50em] h-[40em] inline-block" >
+                        <canvas ref="pdfCanvas"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,6 +41,7 @@
 <script setup>
 import axios from "axios";
 import { ref } from "vue";
+
 const bookname=ref();
 const inputbook=ref();
 const contents=ref();
@@ -47,6 +50,7 @@ const setting=ref();
 const idcontents=ref();
 const idpages=ref();
 const idsettings=ref();
+const pdfCanvas=ref();
 
 function uptobook() {
     inputbook.value.addEventListener('change', handleFileChange);
@@ -58,6 +62,7 @@ function handleFileChange(event) {
     console.log('Selected file:', selectedFile);
     bookname.value = selectedFile ? selectedFile.name : '';
     sendbook(selectedFile,bookname);
+    viewpdf(selectedFile)
 };
 
 async function sendbook(selectedFile,bookname) {

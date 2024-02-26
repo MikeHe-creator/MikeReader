@@ -62,7 +62,6 @@ function handleFileChange(event) {
     console.log('Selected file:', selectedFile);
     bookname.value = selectedFile ? selectedFile.name : '';
     sendbook(selectedFile,bookname);
-    viewpdf(selectedFile)
 };
 
 async function sendbook(selectedFile,bookname) {
@@ -76,8 +75,9 @@ async function sendbook(selectedFile,bookname) {
             }
         })
         .then(response => {
-            console.log(`the file has been sent to python`);
+            const pdfimg=response.data.viewpdf;
             const outline = response.data.outline;
+            //目录
             const idcontents1=idcontents.value;
             if (outline.length === 0){
                 idcontents1.innerHTML="<p class='flex flex-col justify-center items-center'>No catalogue here in your padf.</p>"
@@ -91,7 +91,17 @@ async function sendbook(selectedFile,bookname) {
                     idcontents1.appendChild(directory);
                 });
             }
-
+            //阅读
+            const canvas = pdfCanvas.value;
+            const ctx = canvas.getContext('2d');
+            pdfimg.forEach((imageData) => {
+                const img = new Image();
+                img.src = 'data:image/png;base64,' + imageData;
+                img.onload = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                }
+            })
         });
     } catch (error) {
         console.error(`Meet a problem to deal with the pdf ${bookname.value} contents:`, error);

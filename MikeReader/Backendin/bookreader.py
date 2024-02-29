@@ -44,7 +44,6 @@ def get_PDFoutline(filepath):
                 images.append(image_base64)
     doc.close()
     print("the result of outline", outline)
-    #print("the result of imgbase64: ",image_base64)
     return outline,images
 
 

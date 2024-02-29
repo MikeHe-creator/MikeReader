@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <div class=" bg-black lg:w-[30em] xl:w-[40xl] 2xl:w-[50em] h-[40em] inline-block" >
-                        <canvas ref="pdfCanvas"></canvas>
+                        <canvas ref="pdfCanvas" class=""></canvas>
                     </div>
                 </div>
             </div>
@@ -98,6 +98,10 @@ async function sendbook(selectedFile,bookname) {
                 const img = new Image();
                 img.src = 'data:image/png;base64,' + imageData;
                 img.onload = () => {
+                    const imageWidth = img.width;
+                    const imageHeight = img.height;
+                    canvas.width = imageWidth;
+                    canvas.height = imageHeight;
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                 }

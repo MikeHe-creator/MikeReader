@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="countp"></div>
+</body>
+<script>
+    const countp=document.getElementById("countp");
+    for(var ps=1; ps<101; ps++){
+        const newp=document.createElement("p");
+        newp.innerHTML=`<p id="love${ps}" style="cursor: pointer">I love Candy Guy x${ps}</p>`;
+        countp.appendChild(newp);
+    }
+
+    countp.addEventListener('click', function(event) {
+        if (event.target.tagName === 'P') {
+            const loveCount = parseInt(event.target.id.match(/\d+/)[0]);
+            console.log(`You clicked on I love Candy Guy x${loveCount}`);
+        }
+    })
+</script>
+</html>

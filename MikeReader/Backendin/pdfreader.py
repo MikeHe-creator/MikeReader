@@ -24,6 +24,7 @@ def get_PDF():
     outline,images = get_PDFoutline(filepath)
     os.remove(filepath)
     os.removedirs("temp")
+    print("img张数：",len(images))
     return jsonify({'outline': outline,'viewpdf':images}), 200
 
 def get_PDFoutline(filepath):

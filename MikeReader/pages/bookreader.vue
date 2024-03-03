@@ -1,42 +1,40 @@
 <template>
-    <div class="relative h-screen overflow-hidden">
-        <p class="text-gray-200 lg:text-[300px] text-[270px] ml-[450px] lg:mt-[400px] sm:mt-[300px] rotate-90 lg:rotate-0 -z-10 relative">Bookreader</p>
+  <div class="relative h-screen overflow-hidden">
+    <p class="text-gray-200 lg:text-[300px] text-[270px] ml-[450px] lg:mt-[400px] sm:mt-[300px] rotate-90 lg:rotate-0 -z-10 relative">Bookreader</p>
+  </div>
+  <div class="absolute inset-0">
+    <div class=" bg-gradient-to-r to-orange-500 from-orange-200">
+      <Headline></Headline>
+      <h1 class="ml-[0.5em] mt-[0.4em] text-[2em] bg-orange-500 max-w-[5.7em] text-center">Bookreader</h1>
     </div>
-    <div class="absolute inset-0">
-        <div class=" bg-gradient-to-r to-orange-500 from-orange-200">
-            <Headline></Headline>
-            <h1 class="ml-[0.5em] mt-[0.4em] text-[2em] bg-orange-500 max-w-[5.7em] text-center">Bookreader</h1>
+    <div class=" bg-orange-500 h-2 lg:h-3"></div>
+    <div>
+      <div>
+        <button class=" mt-[2em] lg:ml-[4em] border-orange-400 border-[3px] hover:border-orange-800" @click="uptobook">
+          <p class=" font-bold bg-orange-400 w-[9em]">Upload the book</p>
+        </button>
+        <input type="file" ref="inputbook" accept=".txt, .epub, .mobi, .pdf" class="hidden"><div class=" inline-block ml-[1em]">{{ bookname }}</div>
+      </div>
+      <div>
+        <div class=" bg-orange-100 lg:max-w-[85em] h-[3em] ml-[6em] mt-[1em] flex-col flex justify-center">
+          <button @click="showcontents"><img src="./icons/svg/menu-svgrepo-com.svg" class=" w-[25px] h-[25px] ml-[0.5em]"></button>
         </div>
-        <div class=" bg-orange-500 h-2 lg:h-3"></div>
-        <div>
-            <div>
-                <button class=" mt-[2em] lg:ml-[4em] border-orange-400 border-[3px] hover:border-orange-800" @click="uptobook">
-                    <p class=" font-bold bg-orange-400 w-[9em]">Upload the book</p>
-                </button>
-                <input type="file" ref="inputbook" accept=".txt, .epub, .mobi, .pdf" class="hidden"><div class=" inline-block ml-[1em]">{{ bookname }}</div>
-            </div>
-            <div class=" mt-[2em] lg:ml-[10em]">
-                <div>
-                    <div class=" inline-block w-[6em] bg-gray-300 text-center" ref="contents" @click="contentsclick">contents</div>
-                    <div class=" inline-block w-[6em] bg-gray-200 text-center ml-2" ref="pages" @click="pagesclick">pages</div>
-                    <div class=" inline-block w-[6em] bg-gray-200 text-center ml-2" ref="setting" @click="settingclick">setting</div>
-                </div>
-                <div>
-                    <div class=" bg-gray-300 w-[20em] h-[40em] text-black inline-block overflow-auto ">
-                        <div>
-                            <div ref="idcontents"></div>
-                            <div ref="idpages"></div>
-                            <div ref="idsettings">
-                            </div>
-                        </div>
-                    </div>
-                    <div class=" bg-black lg:w-[30em] xl:w-[40xl] 2xl:w-[50em] h-[40em] inline-block" >
-                        <canvas ref="pdfCanvas" class=""></canvas>
-                    </div>
-                </div>
+        <div class="bg-black lg:max-w-[85em] h-[41em] ml-[6em] flex justify-center  overflow-auto">
+            <div class="flex justify-center items-start ">
+              <div ref="pdfCanvas" class=""></div>
             </div>
         </div>
+        <div ref="contents" class="bg-gray-800 lg:w-[20em] h-[41em] z-10 absolute mt-[-41em] ml-[6em]">
+          <p class="text-white text-[1.5em] ml-[0.5em] font-bold inline-block" ref="menucon">Content List</p>
+          <p class="hidden text-white text-[1.5em] ml-[0.5em] font-bold" ref="pages">Content View</p>
+          <button ref="tridown" class="ml-[2em] brightness-0 invert inline-block" @click="translist"><img src="./icons/svg/triangle-down.svg" class="w-[2em] h-[2em]"></button>
+          <div class="border border-white w-[20em]"></div>
+          <div ref="idcontents" class=" text-white h-[38.3em] overflow-y-auto"></div>
+          <div ref="idpage" class="hidden"></div>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 <script setup>
 import axios from "axios";
@@ -44,96 +42,115 @@ import { ref } from "vue";
 
 const bookname=ref();
 const inputbook=ref();
+const menucon=ref();
 const contents=ref();
 const pages=ref();
 const setting=ref();
 const idcontents=ref();
-const idpages=ref();
-const idsettings=ref();
 const pdfCanvas=ref();
+const idpage=ref();
+const tridown=ref();
 
 function uptobook() {
-    inputbook.value.addEventListener('change', handleFileChange);
-    inputbook.value.click();
+  inputbook.value.addEventListener('change', handleFileChange);
+  inputbook.value.click();
 };
 
 function handleFileChange(event) {
-    const selectedFile = event.target.files[0];
-    console.log('Selected file:', selectedFile);
-    bookname.value = selectedFile ? selectedFile.name : '';
-    sendbook(selectedFile,bookname);
+  const selectedFile = event.target.files[0];
+  console.log('Selected file:', selectedFile);
+  bookname.value = selectedFile ? selectedFile.name : '';
+  sendbook(selectedFile,bookname);
 };
 
 async function sendbook(selectedFile,bookname) {
-    console.log("book information: ", selectedFile); 
-    try {
-        const formData = new FormData();
-        formData.append('book', selectedFile);
-        await axios.post(`http://localhost:5000/sendpdfs`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data' 
-            }
-        })
+  console.log("book information: ", selectedFile);
+  try {
+    const formData = new FormData();
+    formData.append('book', selectedFile);
+    await axios.post(`http://localhost:5000/sendpdfs`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
         .then(response => {
-            const pdfimg=response.data.viewpdf;
-            const outline = response.data.outline;
-            //目录
-            const idcontents1=idcontents.value;
-            if (outline.length === 0){
-                idcontents1.innerHTML="<p class='flex flex-col justify-center items-center'>No catalogue here in your padf.</p>"
-            }else{
-                idcontents1.innerHTML = '';
-                outline.forEach(item => {
-                    const title = item[1]; 
-                    const page = item[2]; 
-                    const directory = document.createElement('p');
-                    directory.innerHTML = `<p>${title}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;page${page}</p>`;
-                    idcontents1.appendChild(directory);
-                });
-            }
-            //阅读
-            const canvas = pdfCanvas.value;
+          const pdfimg=response.data.viewpdf;
+          const outline = response.data.outline;
+          //目录
+          const idcontents1=idcontents.value;
+          if (outline.length === 0){
+            idpage.value.style.display="block";
+            idcontents.value.style.display="none";
+            pages.value.style.display="inline-block";
+            menucon.value.style.display="none";
+            tridown.value.style.display="none";
+          }else{
+            idpage.value.style.display="none";
+            idcontents.value.style.display="block";
+            pages.value.style.display="none";
+            menucon.value.style.display="inline-block";
+            tridown.value.style.display="inline-block";
+            idcontents1.innerHTML = '';
+            outline.forEach(item => {
+              const title = item[1];
+              const page = item[2];
+              const directory = document.createElement('p');
+              directory.innerHTML = `<p class=" mt-[4px] hover:bg-gray-500 cursor-pointer" ref="content${page}">${title}</p>`;
+              idcontents1.appendChild(directory);
+            });
+          }
+          //阅读
+          const pdfCanvas1=pdfCanvas.value;
+          while (pdfCanvas1.firstChild) {
+            pdfCanvas1.removeChild(pdfCanvas1.firstChild);
+          }
+          pdfimg.forEach((imageData, index) => {
+            let canvas = document.createElement('canvas');
+            canvas.style.marginBottom = '5px';
             const ctx = canvas.getContext('2d');
-            pdfimg.forEach((imageData) => {
-                const img = new Image();
-                img.src = 'data:image/png;base64,' + imageData;
-                img.onload = () => {
-                    const imageWidth = img.width;
-                    const imageHeight = img.height;
-                    canvas.width = imageWidth;
-                    canvas.height = imageHeight;
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                }
-            })
+            pdfCanvas1.appendChild(canvas);
+            const img = new Image();
+            img.src = 'data:image/png;base64,' + imageData;
+            img.onload = () => {
+              const imageWidth = img.width;
+              const imageHeight = img.height;
+              canvas.width = imageWidth;
+              canvas.height = imageHeight;
+              //ctx.clearRect(0, 0, canvas.width, canvas.height);
+              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            }
+            if (index === pdfimg.length - 1) {
+              console.log("All PDF pages are displayed.");
+            }
+          })
         });
-    } catch (error) {
-        console.error(`Meet a problem to deal with the pdf ${bookname.value} contents:`, error);
-    }
+  } catch (error) {
+    console.error(`Meet a problem to deal with the pdf ${bookname.value} contents:`, error);
+  }
+}
+function showcontents(){
+  showornot(contents);
+}
+function showornot(contents){
+  if (contents.value.style.display==="block"){
+    contents.value.style.display="none";
+  }else{
+    contents.value.style.display="block";
+  }
+}
+function translist(){
+   if (menucon.value.style.display==="inline-block"){
+     menucon.value.style.display='none';
+     idcontents.value.style.display="none";
+     idpage.value.style.display="block";
+     pages.value.style.display="inline-block";
+   }else{
+     menucon.value.style.display='inline-block';
+     idcontents.value.style.display="block";
+     idpage.value.style.display="none";
+     pages.value.style.display="none";
+   }
 }
 
-function contentsclick(){
-    contents.value.style.backgroundColor="rgb(209 213 219)";
-    pages.value.style.backgroundColor="rgb(229 231 235)";
-    setting.value.style.backgroundColor="rgb(229 231 235)";
-    idcontents.value.style.display="block";
-    idpages.value.style.display="none";
-    idsettings.value.style.display="none"
-};
-function pagesclick(){
-    pages.value.style.backgroundColor="rgb(209 213 219)";
-    contents.value.style.backgroundColor="rgb(229 231 235)";
-    setting.value.style.backgroundColor="rgb(229 231 235)";
-    idpages.value.style.display="block";
-    idcontents.value.style.display="none";
-    idsettings.value.style.display="none"   
-};
-function settingclick(){
-    setting.value.style.backgroundColor="rgb(209 213 219)";
-    contents.value.style.backgroundColor="rgb(229 231 235)";
-    pages.value.style.backgroundColor="rgb(229 231 235)";
-    idsettings.value.style.display="block";
-    idcontents.value.style.display="none";
-    idpages.value.style.display="none"   
-}
+
 </script>

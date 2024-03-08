@@ -35,14 +35,14 @@ const pdfCanvas=ref();
 function uptobook() {
     inputbook.value.addEventListener('change', handleFileChange);
     inputbook.value.click();
-};
+}
 
 function handleFileChange(event) {
     const selectedFile = event.target.files[0];
     console.log('Selected file:', selectedFile);
     bookname.value = selectedFile ? selectedFile.name : '';
     viewpdf(selectedFile);
-};
+}
 function viewpdf(selectedFile){
   const pdfCanvas1=pdfCanvas.value;
   if (!selectedFile) return;

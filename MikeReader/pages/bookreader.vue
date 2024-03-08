@@ -19,7 +19,7 @@
         <div class=" bg-orange-100 lg:max-w-[85em] h-[3em] ml-[6em] mt-[1em] flex-col flex justify-center">
           <button @click="showcontents"><img src="./icons/svg/menu-svgrepo-com.svg" class=" w-[25px] h-[25px] ml-[0.5em]"></button>
         </div>
-        <div class="bg-black lg:max-w-[85em] h-[41em] ml-[6em] flex justify-center  overflow-auto">
+        <div class="bg-black lg:max-w-[85em] h-[41em] ml-[6em] flex justify-center  overflow-auto" ref="display">
             <div class="flex justify-center items-start ">
               <div ref="pdfCanvas" class=""></div>
             </div>
@@ -45,23 +45,23 @@ const inputbook=ref();
 const menucon=ref();
 const contents=ref();
 const pages=ref();
-const setting=ref();
 const idcontents=ref();
 const pdfCanvas=ref();
 const idpage=ref();
 const tridown=ref();
+const display=ref();
 
 function uptobook() {
   inputbook.value.addEventListener('change', handleFileChange);
   inputbook.value.click();
-};
+}
 
 function handleFileChange(event) {
   const selectedFile = event.target.files[0];
   console.log('Selected file:', selectedFile);
   bookname.value = selectedFile ? selectedFile.name : '';
   sendbook(selectedFile,bookname);
-};
+}
 
 async function sendbook(selectedFile,bookname) {
   console.log("book information: ", selectedFile);
@@ -76,8 +76,8 @@ async function sendbook(selectedFile,bookname) {
         .then(response => {
           const pdfimg=response.data.viewpdf;
           const outline = response.data.outline;
-          //目录
           const idcontents1=idcontents.value;
+          //目录
           if (outline.length === 0){
             idpage.value.style.display="block";
             idcontents.value.style.display="none";
@@ -95,10 +95,11 @@ async function sendbook(selectedFile,bookname) {
               const title = item[1];
               const page = item[2];
               const directory = document.createElement('p');
-              directory.innerHTML = `<p class=" mt-[4px] hover:bg-gray-500 cursor-pointer" ref="content${page}">${title}</p>`;
+              directory.innerHTML = `<p class=" mt-[4px] hover:bg-gray-500 cursor-pointer" id="content${page}">${title}</p>`;
               idcontents1.appendChild(directory);
             });
           }
+          jumppage(idcontents1,pdfimg);
           //阅读
           const pdfCanvas1=pdfCanvas.value;
           while (pdfCanvas1.firstChild) {
@@ -116,8 +117,8 @@ async function sendbook(selectedFile,bookname) {
               const imageHeight = img.height;
               canvas.width = imageWidth;
               canvas.height = imageHeight;
-              //ctx.clearRect(0, 0, canvas.width, canvas.height);
               ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              canvas.id=`canvas${index+1}`
             }
             if (index === pdfimg.length - 1) {
               console.log("All PDF pages are displayed.");
@@ -152,5 +153,22 @@ function translist(){
    }
 }
 
-
+function jumppage(idcontents1,pdfimg){
+  const totalpage=pdfimg.length;
+  const displayval=display.value
+  console.log(totalpage);
+  idcontents1.addEventListener('click',function (event){
+    if (event.target.tagName === 'P') {
+      const pid = event.target.getAttribute('id');
+      const pageMatch = pid.match(/content(\d+)/);
+      const pageNumber = parseInt(pageMatch[1]);
+      const targetid = `canvas${pageNumber}`;
+      const targetElement = document.getElementById(targetid);
+      if (targetElement) {
+        const offsetTop = targetElement.offsetTop;
+        displayval.scrollTop = offsetTop === 0 ? 0 : offsetTop - displayval.offsetTop;
+      }
+    }
+  })
+}
 </script>

@@ -3,6 +3,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     'BythirdPartyRegister': typeof import("../components/BythirdPartyRegister.vue")['default']
     'Headline': typeof import("../components/headline.vue")['default']
+    'Pdfreader': typeof import("../components/pdfreader.vue")['default']
     'RegisterStep1': typeof import("../components/register_step1.vue")['default']
     'RegisterStep2': typeof import("../components/register_step2.vue")['default']
     'RegisterStep3': typeof import("../components/register_step3.vue")['default']
@@ -28,6 +29,7 @@ declare module 'vue' {
     'Body': typeof import("../node_modules/nuxt/dist/head/runtime/components")['Body']
     'LazyBythirdPartyRegister': typeof import("../components/BythirdPartyRegister.vue")['default']
     'LazyHeadline': typeof import("../components/headline.vue")['default']
+    'LazyPdfreader': typeof import("../components/pdfreader.vue")['default']
     'LazyRegisterStep1': typeof import("../components/register_step1.vue")['default']
     'LazyRegisterStep2': typeof import("../components/register_step2.vue")['default']
     'LazyRegisterStep3': typeof import("../components/register_step3.vue")['default']
@@ -56,6 +58,7 @@ declare module 'vue' {
 
 export const BythirdPartyRegister: typeof import("../components/BythirdPartyRegister.vue")['default']
 export const Headline: typeof import("../components/headline.vue")['default']
+export const Pdfreader: typeof import("../components/pdfreader.vue")['default']
 export const RegisterStep1: typeof import("../components/register_step1.vue")['default']
 export const RegisterStep2: typeof import("../components/register_step2.vue")['default']
 export const RegisterStep3: typeof import("../components/register_step3.vue")['default']
@@ -81,6 +84,7 @@ export const Html: typeof import("../node_modules/nuxt/dist/head/runtime/compone
 export const Body: typeof import("../node_modules/nuxt/dist/head/runtime/components")['Body']
 export const LazyBythirdPartyRegister: typeof import("../components/BythirdPartyRegister.vue")['default']
 export const LazyHeadline: typeof import("../components/headline.vue")['default']
+export const LazyPdfreader: typeof import("../components/pdfreader.vue")['default']
 export const LazyRegisterStep1: typeof import("../components/register_step1.vue")['default']
 export const LazyRegisterStep2: typeof import("../components/register_step2.vue")['default']
 export const LazyRegisterStep3: typeof import("../components/register_step3.vue")['default']

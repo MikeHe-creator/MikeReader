@@ -9,12 +9,26 @@
     <div>
       <div class="bg-orange-100 mx-[2em] h-[3em] mt-[1em] flex items-center">
         <button @click="showcontents"><img src="./svg/menu-svgrepo-com.svg" class="w-[25px] h-[25px] ml-[0.5em]" alt="menubutton"></button>
+          <button class="hover:bg-orange-200" @click="keyshow"><img alt="Keyshow" src="./svg/highlighter-svgrepo-com.svg" class="w-[25px] h-[25px] ml-[0.5em]"></button>
+          <button class="hover:bg-orange-200" @click="pencil"><img alt="pencil" src="./svg/pencil-icon.svg" class="w-[25px] h-[25px] ml-[0.5em]"></button>
+        <div>
+          <button class="hover:bg-orange-200" v-if="isSmall"><p class="w-[25px] h-[25px] ml-[0.5em]">>></p></button>
+          <div v-else>
+            <button class="hover:bg-orange-200"><img alt="eraser" src="./svg/eraser.svg" class="w-[25px] h-[25px] "></button>
+            <button class="hover:bg-orange-200"><img alt="text" src="./svg/text-78.svg" class="w-[25px] h-[25px] ml-[0.5em]"></button>
+            <button class="hover:bg-orange-200"><img alt="translate" src="./svg/translation-icon.svg" class="w-[25px] h-[25px] ml-[0.5em]"></button>
+            <button class="hover:bg-orange-200"><img alt="magnify" src="./svg/magnifying-glass-zoom-icon.svg" class="w-[25px] h-[25px] ml-[0.5em]"></button>
+          </div>
+        </div>
         <div class="flex-grow text-center">
           <p class="inline-block">
             <input type="number" min="1" :max=totalPage class="w-12 text-right" value="1" ref="currentPage" @change="valuechange">
           </p>
           <p class="inline-block">/</p>
-          <p class="inline-block">{{ totalPage }}</p></div>
+          <p class="inline-block">{{ totalPage }}</p>
+        </div>
+        <button class="hover:bg-orange-200"><img alt="double pages" src="./svg/noun-spread-page-1198029.svg" class="w-[40px] h-[40px] ml-[0.5em]"></button>
+        <button class="hover:bg-orange-200"><img alt="fullscreen" src="./svg/fullscreen-svgrepo-com.svg" class="w-[30px] h-[30px] ml-[0.5em]"></button>
         </div>
       <div class="bg-black mx-[2em] h-[36em] overflow-auto" ref="display">
         <div class="flex justify-center items-start ">
@@ -28,6 +42,17 @@
         <div class="border border-white max-w-[18em]"></div>
         <div ref="idcontents" class=" text-white h-[33em] overflow-y-auto"></div>
         <div ref="idpage" class="hidden h-[33em] overflow-y-auto" ></div>
+      </div>
+      <div class="hidden z-3 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-orange-300 bg-opacity-20 p-4 backdrop-blur-lg" ref="colorpan">
+        <p class="text-[1.2em] text-white font-bold">Highlighter Setting</p>
+        <div class="mt-2">
+          <p class="text-white inline-block">color pan:</p>
+          <input type="color" class="inline-block ml-[1em]">
+        </div>
+        <div>
+          <button class="mb-1 ml-[1em] m-2 bg-blue-600 mt-[40px] rounded-[10px] w-[90px]">Confirm</button>
+          <button class=" mb-1 ml-[1em] m-2 bg-gray-50 rounded-[10px] w-[90px]">Cancel</button>
+        </div>
       </div>
     </div>
   </div>
@@ -49,6 +74,8 @@ const display=ref();
 const pdfroom=[];
 const currentPage=ref();
 const totalPage=ref();
+const isSmall = ref(false);
+onMounted(() => {checkScreenSize();});
 
 function uptobook() {
   inputbook.value.addEventListener('change', handleFileChange);
@@ -135,11 +162,17 @@ function pdfimgs(pdfroom) {
     const img = new Image();
     img.src = 'data:image/png;base64,' + imageData;
     img.onload = () => {
-      const imageWidth = img.width;
-      const imageHeight = img.height;
+      let imageWidth, imageHeight;
+      if (isSmall){
+        imageWidth = img.width*0.67;
+        imageHeight = img.height*0.67;
+      }else{
+        imageWidth = img.width
+        imageHeight = img.height
+      }
       canvas.width = imageWidth;
-      canvas2.width = imageWidth * 0.3;
       canvas.height = imageHeight;
+      canvas2.width = imageWidth * 0.3;
       canvas2.width = imageWidth * 0.3;
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       ctx2.drawImage(img, 0, 0, canvas2.width, canvas2.height);
@@ -263,5 +296,19 @@ function valuechange(event) {
     const offsetTop = targetElement.offsetTop;
     displayval.scrollTop = offsetTop === 0 ? 0 : offsetTop - displayval.offsetTop;
   }
+}
+
+function checkScreenSize() {
+  const screenWidth = window.innerWidth;
+  isSmall.value = screenWidth < 600;
+}
+onMounted(() => {
+  checkScreenSize();
+  window.addEventListener('resize', checkScreenSize);
+});
+
+const colorpan=ref();
+function keyshow(){
+  colorpan.value.style.display='block'
 }
 </script>

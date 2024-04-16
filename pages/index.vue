@@ -1,8 +1,6 @@
 <template>
   <div class="bg-blue-500 absolute inset-0">
-    <div class="w-10 h-10 ml-[1800px] mt-[20px] cursor-pointer">
-      <img alt="user" src="./Elements/svg/default_profile.svg">
-    </div>
+    <user-infro class="ml-[1800px] mt-[20px]" @click="userlog"/>
     <div class="mt-[-50px]">
       <p class="text-[90px] ml-[20px]" id="title"><span class="font-serif italic">Welcome to</span><span ref="title2" class="font-bold ml-[10px]">MikeReader</span></p>
     </div>
@@ -18,10 +16,13 @@
       <button class="text-6xl shadow-2xl shadow-blue-950 mt-12 w-[400px] hover:bg-blue-200" id="button3">Music Player</button><br>
       <button class="text-6xl shadow-2xl shadow-blue-950 mt-12 w-[400px] hover:bg-blue-200" id="button4">Collection</button>
     </div>
+    <profile v-if="showProfile"/>
   </div>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
+import Profile from "~/pages/components/profile.vue";
+import UserInfro from "~/pages/components/UserInfro.vue";
 
 //字体颜色随时间变化而变化
 const title2 = ref(null);
@@ -50,4 +51,8 @@ onMounted(() => {
   setInterval(picchange, 3000);
 });
 
+const showProfile = ref(false);
+function userlog(){
+  showProfile.value = !showProfile.value;
+}
 </script>

@@ -10,7 +10,7 @@
       <nuxt-link class="ml-[20px] text-2xl mt-[48px]">Collections</nuxt-link>
     </div>
     <div class="bg-cyan-200 h-[15px] w-full"></div>
-    <div class="ml-[1850px] mt-[-60px] cursor-pointer z-3"><img class="w-10 h-10" alt="user" src="./Elements/svg/default_profile.svg"></div>
+    <user-infro class="ml-[1800px] mt-[-60px] cursor-pointer" @click="userlog"/>
   </div>
   <div>
     <div class="w-[800px] h-[300px] bg-emerald-400 mt-[300px] ml-[540px]">
@@ -25,12 +25,15 @@
         <button class="w-[300px] h-[30px] bg-blue-500 rounded-[10px] mt-[10px] font-bold">Upload from Baidu Netdisk</button>
       </div>
     </div>
+    <profile v-if="showProfile"/>
   </div>
 </div>
 </template>
 <script setup>
   import {ref} from 'vue';
   import { useRouter } from 'vue-router';
+  import Profile from "~/pages/components/profile.vue";
+  import UserInfro from "~/pages/components/UserInfro.vue";
 
   //导入文件
   const upfiles=ref(null);
@@ -49,6 +52,11 @@
         router.push({ path: '/pdfreader', query: { pdfname:selectedFile.name, pdfAddress:blobUrl} });
       }
     }
+  }
+
+  const showProfile = ref(false);
+  function userlog(){
+    showProfile.value = !showProfile.value;
   }
 </script>
 <style scoped>

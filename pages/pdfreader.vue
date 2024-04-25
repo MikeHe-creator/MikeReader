@@ -9,7 +9,7 @@
       <p class="text-white ml-[10px]">{{ BookName }}</p>
     </div>
     <!--主体内容框-->
-    <div ref="pdfcontent" @change="sendbook" class="flex flex-col items-center overflow-auto w-screen h-[862px] relative top-[42px] z-[-1]" id="pdfcontent" ></div>
+    <div ref="pdfpicture" @change="sendbook" class="flex flex-col items-center overflow-auto w-screen h-[862px] relative top-[42px] z-[-1]" id="pdfpicture" ></div>
     <!--底部页码-->
     <div class="bg-gray-800 fixed bottom-0 left-0 w-full h-[40px]">
 
@@ -22,7 +22,7 @@
       </div>
     </div>
     <!--左侧工具栏-->
-    <pdftool v-if="pdfimg && outline" :pdfimg="pdfimg" :outline="outline" :pdfcontent="pdfcontent" :currentPage="currentPage"/>
+    <pdftool v-if="pdffile && outline" :pdffile="pdffile" :outline="outline" :pdfpicture="pdfpicture" :currentPage="currentPage"/>
   </div>
 </template>
 <script setup>
@@ -39,56 +39,76 @@ const pdfAddress=route.query.pdfAddress
 sendbook(pdfAddress)
 
 //导入文件
-const pdfcontent=ref();
+const pdfpicture=ref();
 const totalPage=ref(0);
-const pdfimg=ref();
+const pdffile=ref();
 const outline=ref();
 async function sendbook(pdfAddress) {
   try {
     const response = await fetch(pdfAddress);
     const blobData = await response.blob();
-    console.log(blobData)
+    console.log(blobData);
     const formData = new FormData();
     formData.append('book', blobData);
     await axios.post(`http://localhost:5000/sendpdfs`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
-    })
-        .then(response => {
-          if (response && response.data && response.data.image_paths) {
-            pdfimg.value = response.data.image_paths;
-            totalPage.value=pdfimg.value.length;
-            outline.value = response.data.outline;
-            console.log('pdfreader-outline',outline)
-            pdfcon(pdfimg);
-          } else {
-            console.error('Error: Invalid response data');
-          }
-        })
+    }).then(response => {
+      if (response && response.data) {
+        pdffile.value = response.data.numpages;
+        outline.value = response.data.outline;
+        totalPage.value = pdffile.value.length;
+        pdfcon(pdffile.value);
+      } else {
+        console.error('Error: Invalid response data');
+      }
+    });
   } catch (error) {
     console.error('Error sending book:', error);
   }
 }
 
 //展示pdf
-function pdfcon(pdfimg){
-  for(let single=0;single<pdfimg.value.length;single++){
-    const pdfcanvas=document.createElement('canvas');
-    pdfcanvas.style.marginBottom = '5px';
-    const ctx = pdfcanvas.getContext('2d');
-    const img = new Image();
-    img.src =  `http://localhost:5000/${pdfimg.value[single]}`;
-    console.log('图片地址：',img.src)
-    img.onload =()=>{
-      const imageWidth = img.width;
-      const imageHeight = img.height;
-      pdfcanvas.width = imageWidth;
-      pdfcanvas.height = imageHeight;
-      ctx.drawImage(img, 0, 0, pdfcanvas.width, pdfcanvas.height);
+function pdfcon(pdffile) {
+  for (const index in pdffile) {
+    const pdftuhua = document.createElement('img');
+    pdftuhua.style.marginBottom = '5px';
+    pdftuhua.alt = `img${parseInt(index) + 1}`;
+    pdftuhua.id = pdftuhua.alt;
+    pdftuhua.src = `_nuxt/Backendin/${pdffile[index]}`;
+    console.log("存储路径", pdftuhua.src);
+    pdfpicture.value.appendChild(pdftuhua);
+
+    pdftuhua.onload = function() {
+      const pdfcanvas = document.createElement('canvas');
+      pdfcanvas.width = pdftuhua.width;
+      pdfcanvas.height = pdftuhua.height;
+      pdfcanvas.id = `canvas${parseInt(index) + 1}`;
+
+      // 应用到 canvas 上
+      pdfcanvas.style.position = 'absolute';
+      pdfpicture.value.appendChild(pdfcanvas);
+
+      // 动态调整 canvas 的位置和大小
+      function adjustCanvas() {
+        const marginLeft = pdftuhua.offsetLeft;
+        const marginTop = pdftuhua.offsetTop;
+        const width = pdftuhua.offsetWidth;
+        const height = pdftuhua.offsetHeight;
+
+        pdfcanvas.style.left = `${marginLeft}px`;
+        pdfcanvas.style.top = `${marginTop}px`;
+        pdfcanvas.width = width;
+        pdfcanvas.height = height;
+      }
+
+      // 窗口大小改变时重新调整
+      window.addEventListener('resize', adjustCanvas);
+
+      // 首次加载时调整
+      adjustCanvas();
     }
-    pdfcanvas.id = `canvas${single + 1}`;
-    pdfcontent.value.appendChild(pdfcanvas);
   }
 }
 
@@ -96,23 +116,21 @@ function pdfcon(pdfimg){
 const currentPage=ref()
 //翻动页面时改动页码值
 function handleScroll() {
-  const canvasnow = pdfcontent.value.getElementsByTagName('canvas');
-  let firstCanvasId = null;
-  for (let i = 0; i < canvasnow.length; i++) {
-    const rect = canvasnow[i].getBoundingClientRect();
+  const imgnow = pdfpicture.value.getElementsByTagName('img');
+  let firstimgId = null;
+  for (let i = 0; i < imgnow.length; i++) {
+    const rect = imgnow[i].getBoundingClientRect();
     if (rect.bottom >= 0 && rect.top <= window.innerHeight) {
-      firstCanvasId = canvasnow[i].id;
-      console.log("firstCanvasId",firstCanvasId)
+      firstimgId = imgnow[i].id;
       break;
     }
   }
   let idNumber = null;
-  if (firstCanvasId) {
-    idNumber = firstCanvasId.match(/\d+/)[0];
+  if (firstimgId) {
+    idNumber = firstimgId.match(/\d+/)[0];
   }
   if (idNumber) {
     currentPage.value.value = parseInt(idNumber)+1;
-    console.log('当前页码：', currentPage.value.value);
   } else {
     console.error("No canvas in view");
   }
@@ -123,28 +141,29 @@ function valuechange(event){
   setTimeout(() => {
     currentPage.value.value = value;
   },10)
-  const canvasID = `canvas${value}`;
-  console.log('canvasID:',canvasID)
-  const targetElement = document.getElementById(canvasID);
+  const imgID = `img${value}`;
+  console.log('imgID:',imgID)
+  const targetElement = document.getElementById(imgID);
   if (targetElement) {
     const offsetTop = targetElement.offsetTop;
-    pdfcontent.value.scrollTop = offsetTop === 0 ? 0 : offsetTop - pdfcontent.value.offsetTop;
+    pdfpicture.value.scrollTop = offsetTop === 0 ? 0 : offsetTop - pdfpicture.value.offsetTop;
   }
 }
 
 onMounted(() => {
-  pdfcontent.value.addEventListener('scroll', handleScroll);
+  pdfpicture.value.addEventListener('scroll', handleScroll);
 });
+
 </script>
 <style scoped>
-#pdfcontent::-webkit-scrollbar {
+#pdfpicture::-webkit-scrollbar {
   width: 8px;
 }
-#pdfcontent::-webkit-scrollbar-track {
+#pdfpicture::-webkit-scrollbar-track {
   background: #000000;
   border-radius: 10px;
 }
-#pdfcontent::-webkit-scrollbar-thumb {
+#pdfpicture::-webkit-scrollbar-thumb {
   background: rgb(80, 86, 96);
   border-radius: 10px;
 }

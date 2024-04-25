@@ -11,8 +11,8 @@ CORS(app)
 def sendpdfs():
     getpdfs = request.files['book']
     print(getpdfs)
-    image_paths, outline = createTEMP(getpdfs)
-    return jsonify({'image_paths': image_paths, 'outline': outline}), 200
+    outline, upload_folder, numpages = createTEMP(getpdfs)
+    return jsonify({'numpages': numpages, 'outline': outline, 'pdftemp':upload_folder}), 200
 
 def createTEMP(getpdfs):
     letters = string.ascii_letters + string.digits
@@ -21,8 +21,8 @@ def createTEMP(getpdfs):
     os.makedirs(upload_folder, exist_ok=True)
     filepath = os.path.join(upload_folder, getpdfs.filename)
     getpdfs.save(filepath)
-    images, outline = turntoPNG(filepath)
-    return images, outline
+    numpages, outline = turntoPNG(filepath)
+    return outline, upload_folder, numpages
 
 def turntoPNG(filepath):
     doc = fitz.open(filepath)
@@ -43,9 +43,9 @@ def turntoPNG(filepath):
     doc.close()
     return images, outline
 
-@app.route('/<folder>/<filename>', methods=['GET'])
-def get_temp_file(folder, filename):
-    return send_from_directory(os.path.join(app.root_path, folder), filename)
+#@app.route('/<folder>/<filename>', methods=['GET'])
+#def get_temp_file(folder, filename):
+    #return send_from_directory(os.path.join(app.root_path, folder), filename)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

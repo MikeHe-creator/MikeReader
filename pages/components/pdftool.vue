@@ -308,7 +308,6 @@ props.pdfpicture.addEventListener('scroll',weeldown);
 function weeldown() {
   const scrollTop = props.pdfpicture.scrollTop;
   const deltaY = scrollTop - lastScrollTop;
-  console.log("Scroll Distance:", deltaY);
   lastScrollTop = scrollTop;
   return lastScrollTop
 }
@@ -317,37 +316,49 @@ let newinputCount = 1;
 function newdiv(event) {
   const newdiv1 = document.createElement('div');
 
-  //构建输入框
-  const newinput = document.createElement('input');
-  newinput.type = 'text';
-  newinput.placeholder = 'Please text here...';
-  newinput.style.border = '1px dashed black';
-  newinput.style.width = '200px';
-  newinput.style.height = '20px';
-  newinput.style.position = 'absolute';
-  newinput.style.top = event.clientY + lastScrollTop + 'px';
-  newinput.style.left = event.clientX  + 'px';
-  newinput.style.zIndex = 5;
-  newinput.style.backgroundColor = 'transparent';
-  newinput.id = `comment${newinputCount}`;
-  newdiv1.appendChild(newinput);
+  // 构建输入框
+  if(!event.target.id.includes('comment') && !hasAncestorWithId(event.target, 'operate')) {
+    const newinput = document.createElement('input');
+    newinput.type = 'text';
+    newinput.placeholder = 'Please text here...';
+    newinput.style.border = '1px dashed black';
+    newinput.style.width = '200px';
+    newinput.style.height = '20px';
+    newinput.style.position = 'absolute';
+    newinput.style.top = event.clientY + lastScrollTop + 'px';
+    newinput.style.left = event.clientX  + 'px';
+    newinput.style.zIndex = 5;
+    newinput.style.backgroundColor = 'transparent';
+    newinput.id = `comment${newinputCount}`;
+    newdiv1.appendChild(newinput);
 
-  //构建操作框
-  const inputOprate = document.createElement('div');
-  inputOprate.style.position = 'absolute';
-  inputOprate.style.left = parseFloat(newinput.style.left) + 'px';
-  inputOprate.style.top = (parseFloat(newinput.style.top) - 40) + 'px';
-  inputOprate.style.backgroundColor = 'white';
-  inputOprate.style.boxShadow = '0px 0px 8px rgba(0, 0, 0, 0.2)';
-  inputOprate.style.width='250px';
-  inputOprate.style.height='35px';
-  createOprate(inputOprate, newinput);
-  inputOprate.id = `operate${newinputCount}`;
-  newdiv1.appendChild(inputOprate);
-  texttarget.appendChild(newdiv1);
+    // 构建操作框
+    const inputOprate = document.createElement('div');
+    inputOprate.style.position = 'absolute';
+    inputOprate.style.left = parseFloat(newinput.style.left) + 'px';
+    inputOprate.style.top = (parseFloat(newinput.style.top) - 40) + 'px';
+    inputOprate.style.backgroundColor = 'white';
+    inputOprate.style.boxShadow = '0px 0px 8px rgba(0, 0, 0, 0.2)';
+    inputOprate.style.width='250px';
+    inputOprate.style.height='35px';
+    createOprate(inputOprate, newinput);
+    inputOprate.id = `operate${newinputCount}`;
+    newdiv1.appendChild(inputOprate);
+    texttarget.appendChild(newdiv1);
 
-  newinputCount++;
-  newdiv1.addEventListener('click',inputhidden)
+    newinputCount++;
+    newdiv1.addEventListener('click',inputhidden);
+  }
+}
+
+function hasAncestorWithId(element, id) {
+  while (element.parentElement) {
+    if (element.parentElement.id && element.parentElement.id.includes(id)) {
+      return true;
+    }
+    element = element.parentElement;
+  }
+  return false;
 }
 
 function createOprate(inputOprate, newinput){

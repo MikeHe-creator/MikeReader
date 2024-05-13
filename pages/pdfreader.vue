@@ -47,23 +47,27 @@ async function sendbook(pdfAddress) {
   try {
     const response = await fetch(pdfAddress);
     const blobData = await response.blob();
-    console.log(blobData);
-    const formData = new FormData();
-    formData.append('book', blobData);
-    await axios.post(`http://localhost:5000/sendpdfs`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    }).then(response => {
-      if (response && response.data) {
-        pdffile.value = response.data.numpages;
-        outline.value = response.data.outline;
-        totalPage.value = pdffile.value.length;
-        pdfcon(pdffile.value);
-      } else {
-        console.error('Error: Invalid response data');
-      }
-    });
+    if (blobData.size > 1024) {
+      const formData = new FormData();
+      formData.append('book', blobData);
+
+      await axios.post(`http://localhost:5000/sendpdfs`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(response => {
+        if (response && response.data) {
+          pdffile.value = response.data.numpages;
+          outline.value = response.data.outline;
+          totalPage.value = pdffile.value.length;
+          pdfcon(pdffile.value);
+        } else {
+          console.error('Error: Invalid response data');
+        }
+      });
+    } else {
+      console.log('Blob size is less than 1KB. Not sending to Python.');
+    }
   } catch (error) {
     console.error('Error sending book:', error);
   }

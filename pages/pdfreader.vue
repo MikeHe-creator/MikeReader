@@ -72,23 +72,27 @@ async function sendbook(pdfAddress) {
 //展示pdf
 function pdfcon(pdffile) {
   for (const index in pdffile) {
+    const pdfdiv =document.createElement('div');
+    pdfdiv.id=`pdfdiv${parseInt(index) + 1}`;
     const pdftuhua = document.createElement('img');
     pdftuhua.style.marginBottom = '5px';
     pdftuhua.alt = `img${parseInt(index) + 1}`;
     pdftuhua.id = pdftuhua.alt;
     pdftuhua.src = `_nuxt/Backendin/${pdffile[index]}`;
     console.log("存储路径", pdftuhua.src);
-    pdfpicture.value.appendChild(pdftuhua);
+    pdfdiv.appendChild(pdftuhua);
 
     pdftuhua.onload = function() {
       const pdfcanvas = document.createElement('canvas');
       pdfcanvas.width = pdftuhua.width;
       pdfcanvas.height = pdftuhua.height;
+      console.log("pdftuhua.height:",pdftuhua.height);
       pdfcanvas.id = `canvas${parseInt(index) + 1}`;
 
       // 应用到 canvas 上
       pdfcanvas.style.position = 'absolute';
-      pdfpicture.value.appendChild(pdfcanvas);
+      pdfdiv.appendChild(pdfcanvas);
+      pdfpicture.value.appendChild(pdfdiv);
 
       // 动态调整 canvas 的位置和大小
       function adjustCanvas() {

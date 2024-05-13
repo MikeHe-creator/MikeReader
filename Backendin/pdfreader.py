@@ -43,10 +43,6 @@ def turntoPNG(filepath):
     doc.close()
     return images, outline
 
-#@app.route('/<folder>/<filename>', methods=['GET'])
-#def get_temp_file(folder, filename):
-    #return send_from_directory(os.path.join(app.root_path, folder), filename)
-
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
 

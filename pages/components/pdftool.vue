@@ -291,14 +291,141 @@ function startpaint(isDrawing,ctx,thiscanvas){
 }
 
 //高级功能--用户标注
+let texttarget;
+let lastScrollTop = 0;
 function textcursor(){
   document.addEventListener('mouseover',(event)=>{
     if (event && event.target && event.target.tagName.toLowerCase() === 'canvas') {
-      const texttarget =event.target;
+      texttarget =event.target.parentNode;
+      console.log('texttarget:',texttarget);
       texttarget.style.cursor = 'text';
+      texttarget.addEventListener('click', newdiv)
     }
   })
 }
+
+props.pdfpicture.addEventListener('scroll',weeldown);
+function weeldown() {
+  const scrollTop = props.pdfpicture.scrollTop;
+  const deltaY = scrollTop - lastScrollTop;
+  console.log("Scroll Distance:", deltaY);
+  lastScrollTop = scrollTop;
+  return lastScrollTop
+}
+
+let newinputCount = 1;
+function newdiv(event) {
+  const newdiv1 = document.createElement('div');
+
+  //构建输入框
+  const newinput = document.createElement('input');
+  newinput.type = 'text';
+  newinput.placeholder = 'Please text here...';
+  newinput.style.border = '1px dashed black';
+  newinput.style.width = '200px';
+  newinput.style.height = '20px';
+  newinput.style.position = 'absolute';
+  newinput.style.top = event.clientY + lastScrollTop + 'px';
+  newinput.style.left = event.clientX  + 'px';
+  newinput.style.zIndex = 5;
+  newinput.style.backgroundColor = 'transparent';
+  newinput.id = `comment${newinputCount}`;
+  newdiv1.appendChild(newinput);
+
+  //构建操作框
+  const inputOprate = document.createElement('div');
+  inputOprate.style.position = 'absolute';
+  inputOprate.style.left = parseFloat(newinput.style.left) + 'px';
+  inputOprate.style.top = (parseFloat(newinput.style.top) - 40) + 'px';
+  inputOprate.style.backgroundColor = 'white';
+  inputOprate.style.boxShadow = '0px 0px 8px rgba(0, 0, 0, 0.2)';
+  inputOprate.style.width='250px';
+  inputOprate.style.height='35px';
+  createOprate(inputOprate, newinput);
+  inputOprate.id = `operate${newinputCount}`;
+  newdiv1.appendChild(inputOprate);
+  texttarget.appendChild(newdiv1);
+
+  newinputCount++;
+  newdiv1.addEventListener('click',inputhidden)
+}
+
+function createOprate(inputOprate, newinput){
+  const fontstyle=document.createElement('select');
+  fontstyle.name='fontstyle';
+  const option1=document.createElement('option');
+  option1.text='normal';
+  option1.value='normal';
+  fontstyle.appendChild(option1);
+  const option2=document.createElement('option');
+  option2.text='Italic';
+  option2.value='Italic';
+  fontstyle.appendChild(option2);
+  fontstyle.style.marginLeft='5px';
+  fontstyle.style.marginTop='3px';
+  fontstyle.style.border = 'none';
+  inputOprate.appendChild(fontstyle);
+
+  const fontsize=document.createElement('input');
+  fontsize.type='number';
+  fontsize.min=4;
+  fontsize.max=70;
+  fontsize.value=11;
+  fontsize.style.width='45px';
+  fontsize.style.marginLeft='5px';
+  fontsize.style.marginTop='3px';
+  fontsize.style.border = 'none';
+  inputOprate.appendChild(fontsize);
+
+  const fontcolor=document.createElement("input");
+  fontcolor.type='color';
+  fontcolor.style.marginLeft='8px';
+  fontcolor.style.marginTop='3px';
+  fontcolor.style.border = 'none';
+  inputOprate.appendChild(fontcolor);
+
+  const buttond=document.createElement('button');
+  const buttoni=document.createElement('img');
+  buttoni.alt='delete';
+  buttoni.src='_nuxt/pages/Elements/svg/rubbish-bin.svg'
+  buttoni.width=20;
+  buttoni.height=20;
+  buttond.appendChild(buttoni);
+  buttond.style.marginLeft='5px';
+  buttond.style.marginTop='3px';
+  buttond.style.border = 'none';
+  inputOprate.appendChild(buttond);
+
+  buttond.addEventListener('click',function (){inputOprate.parentNode.remove();})
+  fontstyle.addEventListener('change', function() {newinput.style.fontStyle = fontstyle.value;});
+  fontcolor.addEventListener('change', function() {newinput.style.color = fontcolor.value;});
+  fontsize.addEventListener('change', function() {newinput.style.fontSize = fontsize.value + 'px';});
+}
+
+function inputhidden(event){
+  const clickedInput = event.target;
+  const thisoprateID='operate'+clickedInput.id.match(/\d+/);
+  const thisoprate=document.getElementById(thisoprateID);
+  console.log('thisoprateID',thisoprateID);
+
+  thisoprate.addEventListener('click', function (event) {
+    event.stopPropagation();
+  });
+
+  document.addEventListener('click', (event) => {
+    if (event.target !== clickedInput && event.target !== thisoprate) {
+      thisoprate.style.display = 'none';
+      clickedInput.style.border = 'none';
+    }
+  });
+
+  clickedInput.addEventListener('click', () => {
+    thisoprate.style.display = 'block';
+  });
+}
+//另存为
+
+
 </script>
 <style scoped>
 #catalogbox::-webkit-scrollbar {

@@ -2,9 +2,9 @@
   <div class="w-[50px] h-[820px] bg-gray-800 mt-[-800px] ml-[15px] rounded-[10px]">
     <button @click="catalog" ref="menu1"><img alt="catalog" src="../Elements/svg/clipboard-list-solid.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
     <button @click="smallview"><img alt="pageview" src="../Elements/svg/viewpage.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
-    <button @click="checkButton('pdfpen')"><img alt="markerpen" src="../Elements/svg/markerpen.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
-    <button @click="checkButton('pdfeasier')"><img alt="easier" src="../Elements/svg/eraser.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
-    <button @click="textcursor"><img alt="text" src="../Elements/svg/text.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
+    <button @click="checkButton('huizhi')"><img alt="markerpen" src="../Elements/svg/markerpen.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
+    <button @click="checkButton('xiangpi')"><img alt="easier" src="../Elements/svg/eraser.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
+    <button @click="checkButton('zhushi')"><img alt="text" src="../Elements/svg/text.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
     <button><img alt="save" src="../Elements/svg/save.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
     <button><img alt="translation" src="../Elements/svg/translation.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
     <button><img alt="doublepage" src="../Elements/svg/doublepage.svg" width="50" height="50" class="invert-[100%] ml-[-3px] mt-[6px]"></button>
@@ -47,7 +47,6 @@
       <p class="inline-block ml-[4px]">Thick</p>
     </div>
   </div>
-  <!--用户标注-->
 
 </template>
 <script setup>
@@ -57,7 +56,6 @@ const catalogbox = ref();
 const menu1 = ref();
 const menu2 = ref();
 const suolvtu = ref();
-const bixiangpi = ref(null);
 const props = defineProps(['pdffile', 'outline', "pdfpicture","currentPage"]);
 console.log('props-pdftool:', props.pdfpicture);
 
@@ -163,50 +161,94 @@ function slvtujump(event){
   }
 }
 
-//高级功能--笔迹和橡皮
+//高级功能
+let currentHandler = null;
+let currentClickHandler = null;
 const OPvalue=ref(100);
 const svgcolor=ref('#ffff00');
 const svgwidth=ref(2);
 const penfunc=ref();
 const circle=ref();
+const bixiangpi=ref();
 let colorvalue='';
 let penline=15;
-let rgba
+let rgba;
+let penClickCount = 0;
+let eraserClickCount = 0;
 
-function checkButton(buttonType){
-  if (bixiangpi.value.style.display === 'none') {
-    bixiangpi.value.style.display = 'block';
-    catalogbox.value.style.display = 'none';
-  } else {
-    bixiangpi.value.style.display = 'none';
+function checkButton(buttonName) {
+  if (currentHandler) {
+    document.removeEventListener('mouseover', currentHandler);
+    currentHandler = null;
   }
-  if (buttonType === 'pdfpen') {
-    console.log('you clicked pdfpen!');
-    penfunc.value.style.display='block';
-    circle.value.style.display='none';
-    document.addEventListener('mouseover', (event)=> {
-      if (event && event.target && event.target.tagName.toLowerCase() === 'canvas') {
-        const thiscanvas = event.target;
-        thiscanvas.style.cursor = 'url(_nuxt/pages/Elements/svg/cursorPen.svg),auto';
-        penpaint1(thiscanvas, penline, rgba);
-      }
-    })
-  }else if(buttonType === 'pdfeasier') {
-    console.log('you clicked pdfeasier!');
-    penfunc.value.style.display='none';
-    circle.value.style.display='block';
-    document.addEventListener('mouseover', (event) => {
-      if (event && event.target && event.target.tagName.toLowerCase() === 'canvas') {
-        const thiscanvas = event.target;
-        console.log('pdfeasier-thiscanvas:',thiscanvas)
-        thiscanvas.style.cursor = 'url(_nuxt/pages/Elements/svg/eraser-rusor.svg) 0 30,auto';
-        penpaint2(thiscanvas,penline);
-      }
-    })
+  if (currentClickHandler) {
+    document.removeEventListener('click', currentClickHandler);
+    currentClickHandler = null;
+  }
+
+  if (buttonName === 'huizhi') {
+    penClickCount++;
+    if (penClickCount % 2 === 1) {
+      bixiangpi.value.style.display = 'block';
+      penfunc.value.style.display = 'block';
+    } else {
+      bixiangpi.value.style.display = 'none';
+      penfunc.value.style.display = 'none';
+    }
+    circle.value.style.display = 'none';
+    currentHandler = PenMouseOver;
+  } else if (buttonName === 'xiangpi') {
+    eraserClickCount++;
+    penfunc.value.style.display = 'none';
+    if (eraserClickCount % 2 === 1) {
+      bixiangpi.value.style.display = 'block';
+      circle.value.style.display = 'block';
+    } else {
+      bixiangpi.value.style.display = 'none';
+      circle.value.style.display = 'none';
+    }
+    currentHandler = EraserMouseOver;
+  } else if (buttonName === 'zhushi') {
+    bixiangpi.value.style.display = 'none';
+    penfunc.value.style.display = 'none';
+    circle.value.style.display = 'none';
+    currentHandler = TextMouseOver;
+  }
+
+  if (currentHandler) {
+    document.addEventListener('mouseover', currentHandler);
   }
 }
 
-//画笔的功能：
+let piccursor=false;
+function PenMouseOver(event) {
+  if (event && event.target && event.target.tagName.toLowerCase() === 'canvas') {
+    const thiscanvas = event.target;
+    thiscanvas.style.cursor = 'url(_nuxt/pages/Elements/svg/cursorPen.svg), auto';
+    piccursor=true;
+    penpaint1(thiscanvas,penline,rgba);
+  }
+}
+
+function EraserMouseOver(event) {
+  if (event && event.target && event.target.tagName.toLowerCase() === 'canvas') {
+    const thiscanvas = event.target;
+    thiscanvas.style.cursor = 'url(_nuxt/pages/Elements/svg/eraser-rusor.svg) 0 30, auto';
+    piccursor=true;
+    penpaint2(thiscanvas,penline);
+  }
+}
+
+function TextMouseOver(event) {
+  if (event && event.target && event.target.tagName.toLowerCase() === 'canvas') {
+    const thiscanvas = event.target;
+    thiscanvas.style.cursor = 'text';
+    piccursor=false;
+    thiscanvas.addEventListener('click', (event)=>textdiv(event,thiscanvas));
+  }
+}
+
+//高级功能--画笔和橡皮
 function pdfpens1(){
   rgba=finalcolor();
 }
@@ -218,6 +260,7 @@ function getpenline(event) {
 }
 
 function  finalcolor(){
+  //console.log('opacity2',opacity2);
   return `rgba(${r},${g},${b},${opacity2})`
 }
 
@@ -241,11 +284,10 @@ function pencolor(event){
   return r,g,b
 }
 
-let lastX = 0;
-let lastY = 0;
 function penpaint1(thiscanvas,penline,rgba){
   const ctx = thiscanvas.getContext('2d');
   ctx.strokeStyle=rgba;
+  console.log('ctx.strokeStyle',ctx.strokeStyle);
   ctx.lineWidth = penline;
   ctx.globalCompositeOperation="source-over";
   let isDrawing = false;
@@ -260,8 +302,11 @@ function penpaint2(thiscanvas,penline){
   startpaint(isDrawing,ctx,thiscanvas)
 }
 
-function startpaint(isDrawing,ctx,thiscanvas){
-  // 开始绘制
+function startpaint(isDrawing, ctx, thiscanvas) {
+  let lastX = 0;
+  let lastY = 0;
+  let points = [];
+
   thiscanvas.addEventListener('mousedown', startDrawing);
   thiscanvas.addEventListener('mousemove', draw);
   thiscanvas.addEventListener('mouseup', stopDrawing);
@@ -269,170 +314,185 @@ function startpaint(isDrawing,ctx,thiscanvas){
 
   function startDrawing(event) {
     isDrawing = true;
+    points = [];
     const { offsetX, offsetY } = event;
     [lastX, lastY] = [offsetX, offsetY];
-    draw(event); // 在起始点立即绘制一个点
+    points.push({ x: offsetX, y: offsetY });
   }
 
   function draw(event) {
     if (!isDrawing) return;
     const { offsetX, offsetY } = event;
+    points.push({ x: offsetX, y: offsetY });
     ctx.beginPath();
-    ctx.moveTo(lastX, lastY); // 移动到上一次的位置
-    ctx.lineTo(offsetX, offsetY); // 绘制到当前位置
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length - 2; i++) {
+      const xc = (points[i].x + points[i + 1].x) / 2;
+      const yc = (points[i].y + points[i + 1].y) / 2;
+      ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+    }
+    ctx.quadraticCurveTo(
+        points[points.length - 2].x,
+        points[points.length - 2].y,
+        points[points.length - 1].x,
+        points[points.length - 1].y
+    );
     ctx.stroke();
-    lastX = offsetX;
-    lastY = offsetY;
   }
 
   function stopDrawing() {
     isDrawing = false;
+    points = [];
   }
 }
 
-//高级功能--用户标注
-let texttarget;
-let lastScrollTop = 0;
-function textcursor(){
-  document.addEventListener('mouseover',(event)=>{
-    if (event && event.target && event.target.tagName.toLowerCase() === 'canvas') {
-      texttarget =event.target.parentNode;
-      console.log('texttarget:',texttarget);
-      texttarget.style.cursor = 'text';
-      texttarget.addEventListener('click', newdiv)
+//高级功能--注释
+let pCount = 1;
+const defaultText = 'please text here...';
+let currentElementP = null;
+let currentInputOprate = null;
+const createdElements = [];
+
+function textdiv(event, thiscanvas) {
+  if (piccursor) return;
+  const texttarget = thiscanvas.parentNode;
+  const wenzidiv = document.createElement('div');
+  const elementP = document.createElement('p');
+  elementP.id = `comment${pCount}`;
+  elementP.innerText = defaultText;
+  elementP.contentEditable = 'true';
+
+  // 获取目标元素的边界框
+  const rect = texttarget.getBoundingClientRect();
+  // 计算相对于目标元素的点击位置
+  const x = event.clientX;
+  const y = event.clientY - rect.top + texttarget.scrollTop;
+  console.log("(event.clientX,event.clientY)", `(${event.clientX},${event.clientY})`);
+  console.log('(x,y)', `(${x}, ${y})`);
+
+  // 检查是否已存在在此位置的 elementP
+  for (const el of createdElements) {
+    const elX = parseFloat(el.style.left);
+    const elY = parseFloat(el.style.top);
+    if (elX === x && elY === y) {
+      return; // 如果存在，直接返回，不创建新元素
     }
-  })
-}
-
-props.pdfpicture.addEventListener('scroll',weeldown);
-function weeldown() {
-  const scrollTop = props.pdfpicture.scrollTop;
-  const deltaY = scrollTop - lastScrollTop;
-  lastScrollTop = scrollTop;
-  return lastScrollTop
-}
-
-let newinputCount = 1;
-function newdiv(event) {
-  const newdiv1 = document.createElement('div');
-
-  // 构建输入框
-  if(!event.target.id.includes('comment') && !hasAncestorWithId(event.target, 'operate')) {
-    const newinput = document.createElement('input');
-    newinput.type = 'text';
-    newinput.placeholder = 'Please text here...';
-    newinput.style.border = '1px dashed black';
-    newinput.style.width = '200px';
-    newinput.style.height = '20px';
-    newinput.style.position = 'absolute';
-    newinput.style.top = event.clientY + lastScrollTop + 'px';
-    newinput.style.left = event.clientX  + 'px';
-    newinput.style.zIndex = 5;
-    newinput.style.backgroundColor = 'transparent';
-    newinput.id = `comment${newinputCount}`;
-    newdiv1.appendChild(newinput);
-
-    // 构建操作框
-    const inputOprate = document.createElement('div');
-    inputOprate.style.position = 'absolute';
-    inputOprate.style.left = parseFloat(newinput.style.left) + 'px';
-    inputOprate.style.top = (parseFloat(newinput.style.top) - 40) + 'px';
-    inputOprate.style.backgroundColor = 'white';
-    inputOprate.style.boxShadow = '0px 0px 8px rgba(0, 0, 0, 0.2)';
-    inputOprate.style.width='250px';
-    inputOprate.style.height='35px';
-    createOprate(inputOprate, newinput);
-    inputOprate.id = `operate${newinputCount}`;
-    newdiv1.appendChild(inputOprate);
-    texttarget.appendChild(newdiv1);
-
-    newinputCount++;
-    newdiv1.addEventListener('click',inputhidden);
   }
-}
 
-function hasAncestorWithId(element, id) {
-  while (element.parentElement) {
-    if (element.parentElement.id && element.parentElement.id.includes(id)) {
-      return true;
+  elementP.style.top = `${y}px`;
+  elementP.style.left = `${x}px`;
+  elementP.style.position = 'absolute';
+  elementP.style.zIndex = 5;
+  elementP.style.backgroundColor = 'transparent';
+  elementP.style.color = 'gray';
+  elementP.addEventListener('focus', function () {
+    if (elementP.innerText === defaultText) {
+      elementP.innerText = '';
+      elementP.style.color = 'black'; // 改变文本颜色
     }
-    element = element.parentElement;
+  });
+  wenzidiv.appendChild(elementP);
+  pCount++;
+  texttarget.appendChild(wenzidiv);
+
+  const inputOprate = document.createElement('div');
+  inputOprate.style.position = 'absolute';
+  inputOprate.style.left = parseFloat(elementP.style.left) + 'px';
+  inputOprate.style.top = (parseFloat(elementP.style.top) - 40) + 'px';
+  inputOprate.style.backgroundColor = 'white';
+  inputOprate.style.boxShadow = '0px 0px 8px rgba(0, 0, 0, 0.2)';
+  inputOprate.style.width = '250px';
+  inputOprate.style.height = '35px';
+  createOprate(inputOprate, elementP);
+  inputOprate.id = `operate${pCount}`;
+  inputOprate.style.display = 'none';
+  wenzidiv.appendChild(inputOprate);
+  texttarget.appendChild(wenzidiv);
+  pCount++;
+
+  // 记录创建的 elementP
+  createdElements.push(elementP);
+
+  elementP.addEventListener('click', function (e) {
+    e.stopPropagation();
+    setEditable(elementP, inputOprate);
+  });
+
+  inputOprate.addEventListener('click', function (e) {
+    e.stopPropagation();
+  });
+
+  document.addEventListener('click', function () {
+    setUneditable(elementP, inputOprate);
+  });
+
+  function setEditable(elementP, inputOprate) {
+    if (currentElementP && currentElementP !== elementP) {
+      setUneditable(currentElementP, currentInputOprate);
+    }
+    elementP.contentEditable = 'true';
+    elementP.focus();
+    inputOprate.style.display = 'block';
+    currentElementP = elementP;
+    currentInputOprate = inputOprate;
   }
-  return false;
+
+  function setUneditable(elementP, inputOprate) {
+    elementP.contentEditable = 'false';
+    inputOprate.style.display = 'none';
+  }
 }
 
-function createOprate(inputOprate, newinput){
-  const fontstyle=document.createElement('select');
-  fontstyle.name='fontstyle';
-  const option1=document.createElement('option');
-  option1.text='normal';
-  option1.value='normal';
+function createOprate(inputOprate, elementP) {
+  const fontstyle = document.createElement('select');
+  fontstyle.name = 'fontstyle';
+  const option1 = document.createElement('option');
+  option1.text = 'normal';
+  option1.value = 'normal';
   fontstyle.appendChild(option1);
-  const option2=document.createElement('option');
-  option2.text='Italic';
-  option2.value='Italic';
+  const option2 = document.createElement('option');
+  option2.text = 'Italic';
+  option2.value = 'Italic';
   fontstyle.appendChild(option2);
-  fontstyle.style.marginLeft='5px';
-  fontstyle.style.marginTop='3px';
+  fontstyle.style.marginLeft = '5px';
+  fontstyle.style.marginTop = '3px';
   fontstyle.style.border = 'none';
   inputOprate.appendChild(fontstyle);
 
-  const fontsize=document.createElement('input');
-  fontsize.type='number';
-  fontsize.min=4;
-  fontsize.max=70;
-  fontsize.value=11;
-  fontsize.style.width='45px';
-  fontsize.style.marginLeft='5px';
-  fontsize.style.marginTop='3px';
+  const fontsize = document.createElement('input');
+  fontsize.type = 'number';
+  fontsize.min = 4;
+  fontsize.max = 70;
+  fontsize.value = 11;
+  fontsize.style.width = '45px';
+  fontsize.style.marginLeft = '5px';
+  fontsize.style.marginTop = '3px';
   fontsize.style.border = 'none';
   inputOprate.appendChild(fontsize);
 
-  const fontcolor=document.createElement("input");
-  fontcolor.type='color';
-  fontcolor.style.marginLeft='8px';
-  fontcolor.style.marginTop='3px';
+  const fontcolor = document.createElement("input");
+  fontcolor.type = 'color';
+  fontcolor.style.marginLeft = '8px';
+  fontcolor.style.marginTop = '3px';
   fontcolor.style.border = 'none';
   inputOprate.appendChild(fontcolor);
 
-  const buttond=document.createElement('button');
-  const buttoni=document.createElement('img');
-  buttoni.alt='delete';
-  buttoni.src='_nuxt/pages/Elements/svg/rubbish-bin.svg'
-  buttoni.width=20;
-  buttoni.height=20;
+  const buttond = document.createElement('button');
+  const buttoni = document.createElement('img');
+  buttoni.alt = 'delete';
+  buttoni.src = '_nuxt/pages/Elements/svg/rubbish-bin.svg'
+  buttoni.width = 20;
+  buttoni.height = 20;
   buttond.appendChild(buttoni);
-  buttond.style.marginLeft='5px';
-  buttond.style.marginTop='3px';
+  buttond.style.marginLeft = '5px';
+  buttond.style.marginTop = '3px';
   buttond.style.border = 'none';
   inputOprate.appendChild(buttond);
 
-  buttond.addEventListener('click',function (){inputOprate.parentNode.remove();})
-  fontstyle.addEventListener('change', function() {newinput.style.fontStyle = fontstyle.value;});
-  fontcolor.addEventListener('change', function() {newinput.style.color = fontcolor.value;});
-  fontsize.addEventListener('change', function() {newinput.style.fontSize = fontsize.value + 'px';});
-}
-
-function inputhidden(event){
-  const clickedInput = event.target;
-  const thisoprateID='operate'+clickedInput.id.match(/\d+/);
-  const thisoprate=document.getElementById(thisoprateID);
-  console.log('thisoprateID',thisoprateID);
-
-  thisoprate.addEventListener('click', function (event) {
-    event.stopPropagation();
-  });
-
-  document.addEventListener('click', (event) => {
-    if (event.target !== clickedInput && event.target !== thisoprate) {
-      thisoprate.style.display = 'none';
-      clickedInput.style.border = 'none';
-    }
-  });
-
-  clickedInput.addEventListener('click', () => {
-    thisoprate.style.display = 'block';
-  });
+  buttond.addEventListener('click', function () { inputOprate.parentNode.remove(); });
+  fontstyle.addEventListener('change', function () { elementP.style.fontStyle = fontstyle.value; });
+  fontcolor.addEventListener('change', function () { elementP.style.color = fontcolor.value; });
+  fontsize.addEventListener('change', function () { elementP.style.fontSize = fontsize.value + 'px'; });
 }
 //另存为
 

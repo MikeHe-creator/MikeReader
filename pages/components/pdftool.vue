@@ -5,7 +5,7 @@
     <button @click="checkButton('huizhi')"><img alt="markerpen" src="../Elements/svg/markerpen.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
     <button @click="checkButton('xiangpi')"><img alt="easier" src="../Elements/svg/eraser.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
     <button @click="checkButton('zhushi')"><img alt="text" src="../Elements/svg/text.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
-    <button><img alt="save" src="../Elements/svg/save.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
+    <button @click="saveasPDF"><img alt="save" src="../Elements/svg/save.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
     <button><img alt="translation" src="../Elements/svg/translation.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
     <button><img alt="doublepage" src="../Elements/svg/doublepage.svg" width="50" height="50" class="invert-[100%] ml-[-3px] mt-[6px]"></button>
     <button><img alt="larger" src="../Elements/svg/larger.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
@@ -50,7 +50,8 @@
 
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import {onMounted, ref} from "vue";
+import axios from "axios";
 
 const catalogbox = ref();
 const menu1 = ref();
@@ -352,21 +353,29 @@ const defaultText = 'please text here...';
 let currentElementP = null;
 let currentInputOprate = null;
 const createdElements = [];
+let lastScrollTop=0
+
+props.pdfpicture.addEventListener('scroll',weeldown);
+function weeldown() {
+  lastScrollTop = props.pdfpicture.scrollTop;
+  return lastScrollTop
+}
 
 function textdiv(event, thiscanvas) {
   if (piccursor) return;
   const texttarget = thiscanvas.parentNode;
+  //const defaultText =`我是${texttarget.id}的孩子`
   const wenzidiv = document.createElement('div');
   const elementP = document.createElement('p');
   elementP.id = `comment${pCount}`;
+  elementP.className=`comentClass(${thiscanvas.id})`;
+  console.log("elementP.class",elementP.class);
   elementP.innerText = defaultText;
   elementP.contentEditable = 'true';
 
-  // 获取目标元素的边界框
   const rect = texttarget.getBoundingClientRect();
-  // 计算相对于目标元素的点击位置
   const x = event.clientX;
-  const y = event.clientY - rect.top + texttarget.scrollTop;
+  const y = event.clientY + lastScrollTop -25;
   console.log("(event.clientX,event.clientY)", `(${event.clientX},${event.clientY})`);
   console.log('(x,y)', `(${x}, ${y})`);
 
@@ -494,10 +503,86 @@ function createOprate(inputOprate, elementP) {
   fontcolor.addEventListener('change', function () { elementP.style.color = fontcolor.value; });
   fontsize.addEventListener('change', function () { elementP.style.fontSize = fontsize.value + 'px'; });
 }
-//另存为
 
+//另存为
+function saveasPDF(){
+  const dataps=collectDataP();
+  const datacanvas=collectDataCanvas();
+
+  axios.post('http://localhost:5000/sendP', {
+    data:dataps
+  })
+  .then(response => console.log(response.data))
+  .catch(error => console.error('Error:', error));
+
+  axios.post('http://localhost:5000/sendCanvas', {
+    data:datacanvas
+  })
+  .then(response => console.log(response.data))
+  .catch(error => console.error('Error:', error));
+}
+
+function collectDataCanvas(){
+  const allcanvas=document.querySelectorAll("canvas");
+  const datacanvas=[];
+  allcanvas.forEach((yuansu) => {
+    const context = yuansu.getContext('2d');
+    const canvasData = context.getImageData(0, 0, yuansu.width, yuansu.height).data;
+
+    let hasContent = false;
+    for (let i = 0; i < canvasData.length; i += 4) {
+      if (canvasData[i + 3] !== 0) { // Check the alpha value
+        hasContent = true;
+        break;
+      }
+    }
+
+    if (hasContent) {
+      const dataURL = yuansu.toDataURL('image/png');
+      datacanvas.push({
+        id: yuansu.id,
+        dataURL: dataURL
+      });
+    }
+  })
+  return datacanvas;
+}
+
+function collectDataP(){
+  const allps = document.querySelectorAll("p");
+  const dataps = [];
+
+  allps.forEach(function(element) {
+    if (element.id.includes("comment")) {
+      console.log('element', element);
+
+      const elementClass = element.getAttribute("class");
+      const style = window.getComputedStyle(element);
+      const styleObject = {
+        top: style.getPropertyValue("top"),
+        left: style.getPropertyValue("left"),
+        position: style.getPropertyValue("position"),
+        zIndex: style.getPropertyValue("z-index"),
+        backgroundColor: style.getPropertyValue("background-color"),
+        color: style.getPropertyValue("color"),
+        fontStyle: style.getPropertyValue("font-style"),
+        fontSize: style.getPropertyValue("font-size"),
+      };
+      const text = element.innerText;
+      const dataP = {
+        style: styleObject,
+        text: text,
+        class: elementClass,
+      };
+      dataps.push(dataP);
+    }
+  })
+  console.log(dataps);
+  return dataps;
+}
 
 </script>
+
 <style scoped>
 #catalogbox::-webkit-scrollbar {
   width: 8px;

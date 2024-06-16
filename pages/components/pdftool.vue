@@ -373,7 +373,6 @@ function textdiv(event, thiscanvas) {
   elementP.innerText = defaultText;
   elementP.contentEditable = 'true';
 
-  const rect = texttarget.getBoundingClientRect();
   const x = event.clientX;
   const y = event.clientY + lastScrollTop -25;
   console.log("(event.clientX,event.clientY)", `(${event.clientX},${event.clientY})`);
@@ -506,20 +505,18 @@ function createOprate(inputOprate, elementP) {
 
 //另存为
 function saveasPDF(){
-  const dataps=collectDataP();
   const datacanvas=collectDataCanvas();
+  const dataps=collectDataP();
 
-  axios.post('http://localhost:5000/sendP', {
-    data:dataps
+  axios.post('http://localhost:5000/sendnotes', {
+    data:{dataps,datacanvas}
   })
-  .then(response => console.log(response.data))
-  .catch(error => console.error('Error:', error));
-
-  axios.post('http://localhost:5000/sendCanvas', {
-    data:datacanvas
-  })
-  .then(response => console.log(response.data))
-  .catch(error => console.error('Error:', error));
+      .then(response =>{
+          console.log(response.data);
+          const temppath=`_nuxt/Backendin/${response.data.savepath}`;
+          downloadFile(temppath);
+      })
+      .catch(error => console.error('下载文件时出错:', error));
 }
 
 function collectDataCanvas(){
@@ -581,6 +578,22 @@ function collectDataP(){
   return dataps;
 }
 
+function downloadFile(temppath) {
+  axios.get(temppath, { responseType: 'blob' })
+      .then(response => {
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = '';
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      })
+      .catch(error => console.error('下载文件时出错:', error));
+}
 </script>
 
 <style scoped>

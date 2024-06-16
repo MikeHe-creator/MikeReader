@@ -9,6 +9,7 @@
 <button onclick="checkButton('huizhi')">绘制</button>
 <button onclick="checkButton('xiangpi')">橡皮</button>
 <button onclick="checkButton('zhushi')">注释</button>
+<button onclick="saveasPDF()">保存</button>
 </body>
 <style>
     #rongqi {
@@ -195,6 +196,7 @@
         const wenzidiv = document.createElement('div');
         const elementP = document.createElement('p');
         elementP.id = `comment${pCount}`;
+        elementP.className=`comentClass(${thiscanvas.id})`;
         elementP.innerText = defaultText;
         elementP.contentEditable = 'true';
 
@@ -311,19 +313,35 @@
         buttond.style.border = 'none';
         inputOprate.appendChild(buttond);
 
-        buttond.addEventListener('click', function () {
-            inputOprate.parentNode.remove();
-        });
-        fontstyle.addEventListener('change', function () {
-            elementP.style.fontStyle = fontstyle.value;
-        });
-        fontcolor.addEventListener('change', function () {
-            elementP.style.color = fontcolor.value;
-        });
-        fontsize.addEventListener('change', function () {
-            elementP.style.fontSize = fontsize.value + 'px';
-        });
+        buttond.addEventListener('click', function () {inputOprate.parentNode.remove();});
+        fontstyle.addEventListener('change', function () {elementP.style.fontStyle = fontstyle.value;});
+        fontcolor.addEventListener('change', function () {elementP.style.color = fontcolor.value;});
+        fontsize.addEventListener('change', function () {elementP.style.fontSize = fontsize.value + 'px';});
     }
 
+    function saveasPDF(){
+        const allps = document.querySelectorAll("p");
+        allps.forEach(function(element) {
+            if (element.id.includes("comment")) {
+                const textE = document.getElementById(element.id);
+                const textstyle = window.getComputedStyle(textE);
+                const fontStyle = textstyle.font;
+                const textColor = textstyle.color;
+                const left = parseFloat(textstyle.left);
+                const top = parseFloat(textstyle.top);
+                const canvasInfo = element.className.match(/\(([^)]+)\)/)[1];
+                const textcanvas = document.getElementById(canvasInfo);
+                const ctx = textcanvas.getContext('2d');
+                const canvasRect = textcanvas.getBoundingClientRect();
+                const adjustedLeft = left - canvasRect.left;
+                const adjustedTop = top - canvasRect.top;
+                ctx.font = fontStyle;
+                ctx.fillStyle = textColor;
+                console.log('textE.textContent',textE.textContent)
+                console.log('(adjustedLeft, adjustedTop+60)',adjustedLeft,adjustedTop+60)
+                ctx.fillText(textE.textContent, adjustedLeft, adjustedTop+60);
+            }
+        });
+    }
 </script>
 </html>

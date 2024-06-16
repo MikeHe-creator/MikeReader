@@ -1,6 +1,5 @@
-import base64,os,string, random,re
-from io import BytesIO
-from flask import Flask, request, jsonify, send_from_directory
+import os,string, random,re,io,base64
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import fitz  # PyMuPDF
 from PIL import Image
@@ -8,19 +7,15 @@ from PIL import Image
 app = Flask(__name__)
 CORS(app)
 
-canvas_ids = []
-foundfile = []
-upload_folder=[]
-
 @app.route('/sendpdfs', methods=['POST'])
 def sendpdfs():
     global foundfile
     getpdfs = request.files['book']
     print(getpdfs)
     outline, upload_folder, numpages = createTEMP(getpdfs)
-    foundfile = getpdfPNG(upload_folder) #新增部分
     return jsonify({'numpages': numpages, 'outline': outline, 'pdftemp':upload_folder}), 200
 
+upload_folder=''
 def createTEMP(getpdfs):
     global upload_folder
     letters = string.ascii_letters + string.digits
@@ -51,91 +46,62 @@ def turntoPNG(filepath):
     doc.close()
     return images, outline
 
-getps = {}
-@app.route("/sendP", methods=['GET', 'POST'])
-def sendP():
-    global getps
-    getps=request.json
-    print(getps)
-    addtext(getps,upload_folder)
-    return jsonify({"message": "Data received successfully", "data":getps})
+#另存为
+@app.route("/sendnotes", methods=['GET', 'POST'])
+def sendnotes():
+    getnotes=request.json
+    print(getnotes)
+    save_path=combineNotes(getnotes)
+    print('sendnotes_savepath',save_path)
+    return {'message': 'saved successfully','savepath':save_path}, 200
 
-@app.route("/sendCanvas", methods=['GET', 'POST'])
-def sendCanvas():
-    global canvas_ids
-    getcanvas=request.json
-    combinePNG(foundfile, getcanvas,upload_folder)
-    return jsonify({"message": "Data received successfully", "data":getcanvas})
+def combineNotes(getnotes):
+    #整合图像
+    doc = fitz.open(upload_folder + '/blob')
+    for text_data in getnotes['data']['datacanvas']:
+        imageNum = text_data['id'][6:]
+        page = doc.load_page(int(imageNum)-1)
+        page_width = page.rect.width
+        page_height = page.rect.height
+        image_data = text_data['dataURL'].split(',')[1]
+        image_bytes = base64.b64decode(image_data)
+        rect = fitz.Rect(0, 0, page_width, page_height)
+        image_stream = io.BytesIO(image_bytes)
+        pix = fitz.Pixmap(image_stream)
+        page.insert_image(rect, pixmap=pix)
 
-def getpdfPNG(upload_folder):
-    foundfile0=[]
-    print('Combining PNG',upload_folder)
-    files = os.listdir(upload_folder)
-    for file_name in files:
-        foundfile0.append(file_name)
-    foundfile=foundfile0[1:]
-    print('Found file:', foundfile)
-    return foundfile
+    #整合文本
+    for text_data in getnotes['data']['dataps']:
+        pclass=text_data['class']
+        match = re.search(r'canvas(\d+)', pclass)
+        pnumber = match.group(1) if match else None
+        page = doc.load_page(int(pnumber)-1)
+        style = text_data['style']
+        text = text_data['text']
+        top = float(re.sub('px$', '', style['top']))
+        left = float(re.sub('px$', '', style['left']))
+        font_size = float(re.sub('px$', '', style['fontSize']))
+        color_match = re.match(r'rgb\((\d+), (\d+), (\d+)\)', style['color'])
+        color = (0, 0, 0)
+        if color_match:
+            color = tuple(map(int, color_match.groups()))
+            color = tuple(c / 255 for c in color)
+        font_style = style['fontStyle']
+        if font_style=='normal':
+            font = '../pages/Elements/font/Misans/MiSans-Normal.ttf'
+            page.insert_font(fontname='F0',fontfile=font)
+        elif font_style=='italic':
+            font = '../pages/Elements/font/Misans/MiSans-Italic.ttf'
+            page.insert_font(fontname='F0',fontfile=font)
+        print('(left,top)',left,top)
+        page.insert_text((left-400, top-(int(pnumber)-1)*page_height), text, fontsize=font_size, fontname='F0', color=color)
+    return pdfsave(doc)
 
-def combinePNG(foundfile, getcanvas, upload_folder):
-    data_list = getcanvas.get('data', [])
-    canvas_ids = [item['id'] for item in data_list]
-    print('canvas_ids',canvas_ids)
-    print(getcanvas)
-    canvas_data = {item['id']: item['dataURL'] for item in data_list}
-    for f1 in foundfile:
-        imgnum = re.search(r'_(\d+)', f1)
-        if imgnum:
-            canvasID = 'canvas' + imgnum.group(1)
-            if canvasID in canvas_ids:
-                print(f"Found matching canvas ID: {canvasID}")
-                # 读取现有图片
-                existing_image_path = os.path.join(upload_folder, f1)
-                existing_image = Image.open(existing_image_path)
-
-                canvas_data_url = canvas_data[canvasID]
-                canvas_base64_str = canvas_data_url.split(',')[1]
-                canvas_image_data = base64.b64decode(canvas_base64_str)
-                canvas_image = Image.open(BytesIO(canvas_image_data))
-
-                combined_image = Image.new('RGBA', existing_image.size)
-                combined_image.paste(existing_image, (0, 0))
-                combined_image.paste(canvas_image, (0, 0), canvas_image)
-
-                base_name = os.path.splitext(f1)[0]
-                preview_image_name = f"combined_{base_name}.png"
-                combined_image_path = os.path.join(upload_folder, preview_image_name)
-                combined_image.save(combined_image_path)
-
-                print(f"Saved combined image at: {combined_image_path}")
-                combined_image.show()
-            else:
-                base_name = os.path.splitext(f1)[0]
-                preview_image_name = f"combined_{base_name}.png"
-                new_file_path = os.path.join(upload_folder, preview_image_name)
-                os.rename(os.path.join(upload_folder, f1), new_file_path)
-        else:
-            print(f"No match found in filename: {f1}")
-
-def addtext(getps,upload_folder):
-    print('addtext',getps)
-    data_list = getps.get('data', [])
-    for item in data_list:
-        textmessage = item.get('text')
-        style = item.get('style', {})
-        textX = style.get('left')
-        textY = style.get('top')
-        textColor=style.get('color')
-        textStyle = style.get('fontStyle')
-        textSize = style.get('fontSize')
-        class_str = item.get('class', '')
-        match = re.search(r'canvas(\d+)', class_str)
-        canvas_number = match.group(1) if match else None
-        wanttofind="combined_image_"+canvas_number+".png"
-        files = os.listdir(upload_folder)
-        if wanttofind in files:
-            wanttofind.insert_text((textX, textY), textmessage, fontsize=textSize, color=textColor, fontname="../pages/Elements/font/MiSans-Light.ttf")
-            wanttofind.show()
+def pdfsave(doc):
+    save_path = os.path.join(upload_folder, 'temp-finished.pdf')
+    doc.save(save_path)
+    doc.close()
+    return save_path
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

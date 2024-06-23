@@ -1,4 +1,4 @@
-import os,string, random,re,io,base64
+import os,string, random,re,io,base64,shutil
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import fitz  # PyMuPDF
@@ -102,6 +102,23 @@ def pdfsave(doc):
     doc.save(save_path)
     doc.close()
     return save_path
+
+#删除文件
+@app.route('/delete-temp-folder', methods=['POST'])
+def delete_temp_folder():
+    user_left=request.json
+    print(user_left)
+    if user_left:
+        temp_folder_path = upload_folder
+        print('temp_folder_path',temp_folder_path)
+        try:
+            if os.path.exists(temp_folder_path):
+                shutil.rmtree(temp_folder_path)
+                return 'Temp folder deleted', 200
+            else:
+                return 'Temp folder not found', 404
+        except Exception as e:
+            return str(e), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

@@ -7,11 +7,10 @@
     <button @click="checkButton('zhushi')"><img alt="text" src="../Elements/svg/text.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
     <button @click="saveasPDF"><img alt="save" src="../Elements/svg/save.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
     <button><img alt="translation" src="../Elements/svg/translation.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
-    <button><img alt="doublepage" src="../Elements/svg/doublepage.svg" width="50" height="50" class="invert-[100%] ml-[-3px] mt-[6px]"></button>
-    <button><img alt="larger" src="../Elements/svg/larger.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
-    <button><img alt="smaller" src="../Elements/svg/smaller.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
+    <button @click="larger"><img alt="larger" src="../Elements/svg/larger.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
+    <button @click="smaller"><img alt="smaller" src="../Elements/svg/smaller.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
     <div>
-      <button><img alt="fullscreen" src="../Elements/svg/fullscreen.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
+      <button @click="fullreader"><img alt="fullscreen" src="../Elements/svg/fullscreen.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px]"></button>
       <button><img alt="backscreen" src="../Elements/svg/fullscreen-exit.svg" width="30" height="30" class="invert-[100%] ml-[6px] mt-[6px] hidden"></button>
     </div>
   </div>
@@ -593,6 +592,47 @@ function downloadFile(temppath) {
         URL.revokeObjectURL(url);
       })
       .catch(error => console.error('下载文件时出错:', error));
+}
+
+// 放大
+function larger() {
+  const canvases = document.querySelectorAll('.imgcanvas, .writecanvas');
+  canvases.forEach(canvas => {
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+    canvas.width *= 2;
+    canvas.height *= 2;
+  });
+  adjustnow();
+}
+
+// 缩小
+function smaller() {
+  const canvases = document.querySelectorAll('.imgcanvas, .writecanvas');
+  canvases.forEach(canvas => {
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+    if (canvas.width > 1) {
+      canvas.width *= 0.5;
+      canvas.height *= 0.5;
+    }
+  });
+  adjustnow();
+}
+
+function adjustnow() {
+  const imgcanvas = document.getElementsByClassName('imgcanvas');
+  const writercanvases = document.getElementsByClassName('writecanvas');
+
+  if (imgcanvas) {
+    const imgcanvasLeft = imgcanvas[0].offsetLeft;
+    const imgcanvasTop = imgcanvas[0].offsetTop;
+    Array.from(writercanvases).forEach(writercanvas => {
+      writercanvas.style.position = 'absolute';
+      writercanvas.style.left = imgcanvasLeft + 'px';
+      writercanvas.style.top = imgcanvasTop + 'px';
+    });
+  }
 }
 </script>
 

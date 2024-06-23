@@ -4,8 +4,8 @@
     <loading class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 hidden" ref="loadImg"/>
     <!--头部标题-->
     <div class='bg-gray-800 h-[40px] flex items-center fixed w-screen'>
-      <nuxt-link to="/" class="bg-blue-500 text-white text-[20px] rounded-[10px] text-center ml-[10px] w-[75px]">Home</nuxt-link>
-      <nuxt-link to="BookReader" class="bg-blue-500 text-white text-[20px] rounded-[10px] text-center ml-[10px] w-[75px]">Back</nuxt-link>
+      <nuxt-link to="/" class="bg-blue-500 text-white text-[20px] rounded-[10px] text-center ml-[10px] w-[75px]" @click="lefthere">Home</nuxt-link>
+      <nuxt-link to="BookReader" class="bg-blue-500 text-white text-[20px] rounded-[10px] text-center ml-[10px] w-[75px]"  @click="lefthere">Back</nuxt-link>
       <p class="text-white ml-[10px]">{{ BookName }}</p>
     </div>
     <!--主体内容框-->
@@ -82,6 +82,7 @@ function pdfcon(pdffile) {
     pdftuhua.style.marginBottom = '5px';
     pdftuhua.alt = `img${parseInt(index) + 1}`;
     pdftuhua.id = pdftuhua.alt;
+    pdftuhua.classList='imgcanvas';
     pdftuhua.src = `_nuxt/Backendin/${pdffile[index]}`;
     console.log("存储路径", pdftuhua.src);
     pdfdiv.appendChild(pdftuhua);
@@ -92,6 +93,7 @@ function pdfcon(pdffile) {
       pdfcanvas.height = pdftuhua.height;
       console.log("pdftuhua.height:",pdftuhua.height);
       pdfcanvas.id = `canvas${parseInt(index) + 1}`;
+      pdfcanvas.classList='writecanvas'
 
       // 应用到 canvas 上
       pdfcanvas.style.position = 'absolute';
@@ -161,6 +163,30 @@ function valuechange(event){
 onMounted(() => {
   pdfpicture.value.addEventListener('scroll', handleScroll);
 });
+
+//关闭窗口，删除文件
+function lefthere(){
+  console.log('lefthere,you left');
+  cleantemp()
+}
+
+window.addEventListener('beforeunload', function(event) {
+  event.preventDefault();
+  cleantemp();
+  console.log('清理请求已发送。');
+});
+
+function cleantemp(){
+  axios.post('http://localhost:5000/delete-temp-folder',{
+    inform:'User left out!'
+  })
+      .then(response => {
+        console.log('Temp folder deleted:', response.data);
+      })
+      .catch(error => {
+        console.error('Error deleting temp folder:', error);
+      });
+}
 
 </script>
 <style scoped>

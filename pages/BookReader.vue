@@ -50,6 +50,8 @@
     function bookinfo(blobUrl,selectedFile){
       if (selectedFile.name.endsWith('.pdf')) {
         router.push({ path: '/pdfreader', query: { pdfname:selectedFile.name, pdfAddress:blobUrl} });
+      }else if(selectedFile.name.endsWith('.epub')){
+        router.push({ path: '/epubtext', query: { epubtextname:selectedFile.name, epubtextAddress:blobUrl} });
       }
     }
   }

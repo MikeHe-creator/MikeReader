@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<package version="2.0" unique-identifier="PrimaryID" mlns="http://www.idpf.org/2007/opf">
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+        <dc:title>纳尼亚传奇（完美全集）</dc:title>
+        <dc:identifier opf:scheme="ISBN"></dc:identifier>
+        <dc:language>简体中文</dc:language>
+        <dc:creator>C.S 路易斯</dc:creator>
+        <dc:publisher>epub掌上书苑</dc:publisher>
+        <dc:description>《纳尼亚传奇》（The Chronicles of Narnia）是一套七册的奇幻儿童文学，由英国作家C·S·路易斯在1950年代所著，为英美儿童文学经典之一。故事的开始讲述一个小男孩和一个女孩偶然进入了一个异世界，称为纳尼亚，并在那里经历过一连串的冒险，及看到那个世界的创造。之后，他将一颗从异世界带来的种子(苹果)埋在花园里，还长成了一颗大树。这棵大树后来被飓风刮倒，又被造成了衣橱，然后又引领了四个小孩子进入这个神奇国度的不同时期，每一本互有关连，但亦可独立阅读。</dc:description>
+        <dc:coverage></dc:coverage>
+        <dc:source>http://www.cnepub.com</dc:source>
+        <dc:date>2010-11-21</dc:date>
+        <dc:rights>本电子书由epubBuilder制作生成，欢迎访问http://www.cnepub.com浏览海量电子书。</dc:rights>
+        <dc:subject>外国小说</dc:subject>
+        <dc:contributor></dc:contributor>
+        <dc:type>[type]</dc:type>
+        <dc:format></dc:format>
+        <dc:relation></dc:relation>
+        <dc:builder>epubBuilder</dc:builder>
+        <dc:builder_version>2.6.10.29</dc:builder_version>
+        <meta name="cover" content="cover-image"/>
+    </metadata>
+    <manifest>
+        <!-- Content Documents -->
+        <item id="main-css" href="css/main.css" media-type="text/css"/>
+        <item id="coverpage"  href="coverpage.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6918"  href="chapter6918.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6925"  href="chapter6925.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6945"  href="chapter6945.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6946"  href="chapter6946.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6947"  href="chapter6947.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6948"  href="chapter6948.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6949"  href="chapter6949.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6950"  href="chapter6950.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6951"  href="chapter6951.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6952"  href="chapter6952.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6953"  href="chapter6953.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6954"  href="chapter6954.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6955"  href="chapter6955.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6956"  href="chapter6956.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6957"  href="chapter6957.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6958"  href="chapter6958.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6959"  href="chapter6959.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6960"  href="chapter6960.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6961"  href="chapter6961.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6919"  href="chapter6919.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6962"  href="chapter6962.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6963"  href="chapter6963.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6964"  href="chapter6964.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6965"  href="chapter6965.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6966"  href="chapter6966.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6967"  href="chapter6967.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6968"  href="chapter6968.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6969"  href="chapter6969.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6970"  href="chapter6970.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6971"  href="chapter6971.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6972"  href="chapter6972.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6973"  href="chapter6973.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6974"  href="chapter6974.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6975"  href="chapter6975.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6920"  href="chapter6920.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6976"  href="chapter6976.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6977"  href="chapter6977.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6978"  href="chapter6978.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6979"  href="chapter6979.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6980"  href="chapter6980.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6981"  href="chapter6981.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6982"  href="chapter6982.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6983"  href="chapter6983.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6984"  href="chapter6984.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6985"  href="chapter6985.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6986"  href="chapter6986.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6987"  href="chapter6987.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6988"  href="chapter6988.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6989"  href="chapter6989.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6990"  href="chapter6990.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6991"  href="chapter6991.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6921"  href="chapter6921.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6992"  href="chapter6992.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6993"  href="chapter6993.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6994"  href="chapter6994.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6995"  href="chapter6995.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6996"  href="chapter6996.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6997"  href="chapter6997.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6998"  href="chapter6998.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6999"  href="chapter6999.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7000"  href="chapter7000.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7001"  href="chapter7001.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7002"  href="chapter7002.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7003"  href="chapter7003.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7004"  href="chapter7004.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7005"  href="chapter7005.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7006"  href="chapter7006.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6922"  href="chapter6922.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7007"  href="chapter7007.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7008"  href="chapter7008.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7009"  href="chapter7009.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7010"  href="chapter7010.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7011"  href="chapter7011.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7012"  href="chapter7012.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7013"  href="chapter7013.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7014"  href="chapter7014.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7015"  href="chapter7015.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7016"  href="chapter7016.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7017"  href="chapter7017.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7018"  href="chapter7018.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7019"  href="chapter7019.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7020"  href="chapter7020.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7021"  href="chapter7021.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6923"  href="chapter6923.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7022"  href="chapter7022.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7023"  href="chapter7023.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7024"  href="chapter7024.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7025"  href="chapter7025.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7026"  href="chapter7026.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7027"  href="chapter7027.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7028"  href="chapter7028.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7029"  href="chapter7029.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7030"  href="chapter7030.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7031"  href="chapter7031.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7032"  href="chapter7032.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7033"  href="chapter7033.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7034"  href="chapter7034.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7035"  href="chapter7035.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter6924"  href="chapter6924.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7036"  href="chapter7036.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7037"  href="chapter7037.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7038"  href="chapter7038.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7039"  href="chapter7039.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7040"  href="chapter7040.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7041"  href="chapter7041.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7042"  href="chapter7042.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7043"  href="chapter7043.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7044"  href="chapter7044.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7045"  href="chapter7045.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7046"  href="chapter7046.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7047"  href="chapter7047.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7048"  href="chapter7048.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7049"  href="chapter7049.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7050"  href="chapter7050.html"  media-type="application/xhtml+xml"/>
+        <item id="chapter7051"  href="chapter7051.html"  media-type="application/xhtml+xml"/>
+
+        <item id="ncx"  href="fb.ncx" media-type="application/x-dtbncx+xml"/>
+        <item id="css" href="css/main.css" media-type="text/css"/>
+        <item id="cover-image" href="images/cover.jpg" media-type="image/jpeg"/>
+    </manifest>
+    <spine toc="ncx">
+        <itemref idref="coverpage" linear="yes"/>
+        <itemref idref="chapter6918" linear="yes"/>
+        <itemref idref="chapter6925" linear="yes"/>
+        <itemref idref="chapter6945" linear="yes"/>
+        <itemref idref="chapter6946" linear="yes"/>
+        <itemref idref="chapter6947" linear="yes"/>
+        <itemref idref="chapter6948" linear="yes"/>
+        <itemref idref="chapter6949" linear="yes"/>
+        <itemref idref="chapter6950" linear="yes"/>
+        <itemref idref="chapter6951" linear="yes"/>
+        <itemref idref="chapter6952" linear="yes"/>
+        <itemref idref="chapter6953" linear="yes"/>
+        <itemref idref="chapter6954" linear="yes"/>
+        <itemref idref="chapter6955" linear="yes"/>
+        <itemref idref="chapter6956" linear="yes"/>
+        <itemref idref="chapter6957" linear="yes"/>
+        <itemref idref="chapter6958" linear="yes"/>
+        <itemref idref="chapter6959" linear="yes"/>
+        <itemref idref="chapter6960" linear="yes"/>
+        <itemref idref="chapter6961" linear="yes"/>
+        <itemref idref="chapter6919" linear="yes"/>
+        <itemref idref="chapter6962" linear="yes"/>
+        <itemref idref="chapter6963" linear="yes"/>
+        <itemref idref="chapter6964" linear="yes"/>
+        <itemref idref="chapter6965" linear="yes"/>
+        <itemref idref="chapter6966" linear="yes"/>
+        <itemref idref="chapter6967" linear="yes"/>
+        <itemref idref="chapter6968" linear="yes"/>
+        <itemref idref="chapter6969" linear="yes"/>
+        <itemref idref="chapter6970" linear="yes"/>
+        <itemref idref="chapter6971" linear="yes"/>
+        <itemref idref="chapter6972" linear="yes"/>
+        <itemref idref="chapter6973" linear="yes"/>
+        <itemref idref="chapter6974" linear="yes"/>
+        <itemref idref="chapter6975" linear="yes"/>
+        <itemref idref="chapter6920" linear="yes"/>
+        <itemref idref="chapter6976" linear="yes"/>
+        <itemref idref="chapter6977" linear="yes"/>
+        <itemref idref="chapter6978" linear="yes"/>
+        <itemref idref="chapter6979" linear="yes"/>
+        <itemref idref="chapter6980" linear="yes"/>
+        <itemref idref="chapter6981" linear="yes"/>
+        <itemref idref="chapter6982" linear="yes"/>
+        <itemref idref="chapter6983" linear="yes"/>
+        <itemref idref="chapter6984" linear="yes"/>
+        <itemref idref="chapter6985" linear="yes"/>
+        <itemref idref="chapter6986" linear="yes"/>
+        <itemref idref="chapter6987" linear="yes"/>
+        <itemref idref="chapter6988" linear="yes"/>
+        <itemref idref="chapter6989" linear="yes"/>
+        <itemref idref="chapter6990" linear="yes"/>
+        <itemref idref="chapter6991" linear="yes"/>
+        <itemref idref="chapter6921" linear="yes"/>
+        <itemref idref="chapter6992" linear="yes"/>
+        <itemref idref="chapter6993" linear="yes"/>
+        <itemref idref="chapter6994" linear="yes"/>
+        <itemref idref="chapter6995" linear="yes"/>
+        <itemref idref="chapter6996" linear="yes"/>
+        <itemref idref="chapter6997" linear="yes"/>
+        <itemref idref="chapter6998" linear="yes"/>
+        <itemref idref="chapter6999" linear="yes"/>
+        <itemref idref="chapter7000" linear="yes"/>
+        <itemref idref="chapter7001" linear="yes"/>
+        <itemref idref="chapter7002" linear="yes"/>
+        <itemref idref="chapter7003" linear="yes"/>
+        <itemref idref="chapter7004" linear="yes"/>
+        <itemref idref="chapter7005" linear="yes"/>
+        <itemref idref="chapter7006" linear="yes"/>
+        <itemref idref="chapter6922" linear="yes"/>
+        <itemref idref="chapter7007" linear="yes"/>
+        <itemref idref="chapter7008" linear="yes"/>
+        <itemref idref="chapter7009" linear="yes"/>
+        <itemref idref="chapter7010" linear="yes"/>
+        <itemref idref="chapter7011" linear="yes"/>
+        <itemref idref="chapter7012" linear="yes"/>
+        <itemref idref="chapter7013" linear="yes"/>
+        <itemref idref="chapter7014" linear="yes"/>
+        <itemref idref="chapter7015" linear="yes"/>
+        <itemref idref="chapter7016" linear="yes"/>
+        <itemref idref="chapter7017" linear="yes"/>
+        <itemref idref="chapter7018" linear="yes"/>
+        <itemref idref="chapter7019" linear="yes"/>
+        <itemref idref="chapter7020" linear="yes"/>
+        <itemref idref="chapter7021" linear="yes"/>
+        <itemref idref="chapter6923" linear="yes"/>
+        <itemref idref="chapter7022" linear="yes"/>
+        <itemref idref="chapter7023" linear="yes"/>
+        <itemref idref="chapter7024" linear="yes"/>
+        <itemref idref="chapter7025" linear="yes"/>
+        <itemref idref="chapter7026" linear="yes"/>
+        <itemref idref="chapter7027" linear="yes"/>
+        <itemref idref="chapter7028" linear="yes"/>
+        <itemref idref="chapter7029" linear="yes"/>
+        <itemref idref="chapter7030" linear="yes"/>
+        <itemref idref="chapter7031" linear="yes"/>
+        <itemref idref="chapter7032" linear="yes"/>
+        <itemref idref="chapter7033" linear="yes"/>
+        <itemref idref="chapter7034" linear="yes"/>
+        <itemref idref="chapter7035" linear="yes"/>
+        <itemref idref="chapter6924" linear="yes"/>
+        <itemref idref="chapter7036" linear="yes"/>
+        <itemref idref="chapter7037" linear="yes"/>
+        <itemref idref="chapter7038" linear="yes"/>
+        <itemref idref="chapter7039" linear="yes"/>
+        <itemref idref="chapter7040" linear="yes"/>
+        <itemref idref="chapter7041" linear="yes"/>
+        <itemref idref="chapter7042" linear="yes"/>
+        <itemref idref="chapter7043" linear="yes"/>
+        <itemref idref="chapter7044" linear="yes"/>
+        <itemref idref="chapter7045" linear="yes"/>
+        <itemref idref="chapter7046" linear="yes"/>
+        <itemref idref="chapter7047" linear="yes"/>
+        <itemref idref="chapter7048" linear="yes"/>
+        <itemref idref="chapter7049" linear="yes"/>
+        <itemref idref="chapter7050" linear="yes"/>
+        <itemref idref="chapter7051" linear="yes"/>
+
+    </spine>
+    <guide>
+        <reference type="cover" title="封面"  href="coverpage.html"/>
+        <reference type="text" title="第一部——狮子女巫与魔衣橱"  href="chapter6918.html"/>
+        <reference type="text" title="前言"  href="chapter6925.html"/>
+        <reference type="text" title="chapter1 露茜窥探衣橱"  href="chapter6945.html"/>
+        <reference type="text" title="chapter2 柜中天地"  href="chapter6946.html"/>
+        <reference type="text" title="chapter3 爱德蒙和衣橱"  href="chapter6947.html"/>
+        <reference type="text" title="chapter4 土耳其软糖"  href="chapter6948.html"/>
+        <reference type="text" title="chapter5 回到了橱门这一边"  href="chapter6949.html"/>
+        <reference type="text" title="chapter6 进入森林"  href="chapter6950.html"/>
+        <reference type="text" title="chapter7 在海狸家里的一天"  href="chapter6951.html"/>
+        <reference type="text" title="chapter8 饭后发生的情况"  href="chapter6952.html"/>
+        <reference type="text" title="chapter9 妖婆的房子 （女巫的房子）&quot;"  href="chapter6953.html"/>
+        <reference type="text" title="chapter10 魔法开始破了"  href="chapter6954.html"/>
+        <reference type="text" title="chapter11 阿斯兰快到了"  href="chapter6955.html"/>
+        <reference type="text" title="chapter12 彼得初战告捷"  href="chapter6956.html"/>
+        <reference type="text" title="chapter13 远古时代的高深魔法"  href="chapter6957.html"/>
+        <reference type="text" title="chapter14 妖婆的胜利 『这里的妖婆 即  女巫』"  href="chapter6958.html"/>
+        <reference type="text" title="chapter15 太古时代更加高深的魔法"  href="chapter6959.html"/>
+        <reference type="text" title="chapter16 石像的遭遇"  href="chapter6960.html"/>
+        <reference type="text" title="chapter17 追猎白鹿"  href="chapter6961.html"/>
+        <reference type="text" title="第二部——凯斯宾王子"  href="chapter6919.html"/>
+        <reference type="text" title="chapter1 小岛"  href="chapter6962.html"/>
+        <reference type="text" title="chapter2 古老的宝库"  href="chapter6963.html"/>
+        <reference type="text" title="chapter3 小矮人"  href="chapter6964.html"/>
+        <reference type="text" title="chapter4 凯斯宾王子的故事"  href="chapter6965.html"/>
+        <reference type="text" title="chapter5 凯斯宾深山探险"  href="chapter6966.html"/>
+        <reference type="text" title="chapter6 隐居者"  href="chapter6967.html"/>
+        <reference type="text" title="chapter7 危险笼罩着古老的纳尼亚"  href="chapter6968.html"/>
+        <reference type="text" title="chapter8 号角的魔力"  href="chapter6969.html"/>
+        <reference type="text" title="chapter9 露茜看到了什么"  href="chapter6970.html"/>
+        <reference type="text" title="chapter10 狮王归来&quot;"  href="chapter6971.html"/>
+        <reference type="text" title="chapter11 雄狮长啸"  href="chapter6972.html"/>
+        <reference type="text" title="chapter12 反叛"  href="chapter6973.html"/>
+        <reference type="text" title="chapter13 决斗"  href="chapter6974.html"/>
+        <reference type="text" title="chapter14 解放"  href="chapter6975.html"/>
+        <reference type="text" title="第三部——黎明踏浪号"  href="chapter6920.html"/>
+        <reference type="text" title="chapter1 卧室里的画"  href="chapter6976.html"/>
+        <reference type="text" title="chapter2 在黎明踏浪号上"  href="chapter6977.html"/>
+        <reference type="text" title="chapter3 孤独群岛"  href="chapter6978.html"/>
+        <reference type="text" title="chapter4 凯斯宾巧施奇记"  href="chapter6979.html"/>
+        <reference type="text" title="chapter5 风暴和余波"  href="chapter6980.html"/>
+        <reference type="text" title="chapter6 尤斯塔斯的历险"  href="chapter6981.html"/>
+        <reference type="text" title="chapter7 脱险"  href="chapter6982.html"/>
+        <reference type="text" title="chapter8 两次死里逃生"  href="chapter6983.html"/>
+        <reference type="text" title="chapter9 声音岛"  href="chapter6984.html"/>
+        <reference type="text" title="chapter10 魔法书"  href="chapter6985.html"/>
+        <reference type="text" title="chapter11 笨蛋瓜皆大欢喜"  href="chapter6986.html"/>
+        <reference type="text" title="chapter12 黑暗岛"  href="chapter6987.html"/>
+        <reference type="text" title="chapter13 三个沉睡的人"  href="chapter6988.html"/>
+        <reference type="text" title="chapter14 世界尽头的起点"  href="chapter6989.html"/>
+        <reference type="text" title="chapter15 最后一片大海的奇观"  href="chapter6990.html"/>
+        <reference type="text" title="chapter16 真正的世界尽头"  href="chapter6991.html"/>
+        <reference type="text" title="第四部——银椅"  href="chapter6921.html"/>
+        <reference type="text" title="chapter1 在体育馆后面"  href="chapter6992.html"/>
+        <reference type="text" title="chapter2 吉尔接受任务"  href="chapter6993.html"/>
+        <reference type="text" title="chapter3 国王启航"  href="chapter6994.html"/>
+        <reference type="text" title="chapter4 猫头鹰的会议"  href="chapter6995.html"/>
+        <reference type="text" title="chapter5 普德格伦"  href="chapter6996.html"/>
+        <reference type="text" title="chapter6 北方的荒原"  href="chapter6997.html"/>
+        <reference type="text" title="chapter7 小山上奇怪的壕沟"  href="chapter6998.html"/>
+        <reference type="text" title="chapter9 真相大白"  href="chapter6999.html"/>
+        <reference type="text" title="chapter10 不见太阳的旅行"  href="chapter7000.html"/>
+        <reference type="text" title="chapter11 在黑暗的城堡里"  href="chapter7001.html"/>
+        <reference type="text" title="chapter12 地下世界的女王"  href="chapter7002.html"/>
+        <reference type="text" title="chapter13 没有女王的地下世界"  href="chapter7003.html"/>
+        <reference type="text" title="chapter14 世界底层"  href="chapter7004.html"/>
+        <reference type="text" title="chapter15 吉尔不见了"  href="chapter7005.html"/>
+        <reference type="text" title="chapter16 皆大欢喜"  href="chapter7006.html"/>
+        <reference type="text" title="第五部——能言马与男孩"  href="chapter6922.html"/>
+        <reference type="text" title="chapter1 沙斯塔如何启程"  href="chapter7007.html"/>
+        <reference type="text" title="chapter2 道旁遇险"  href="chapter7008.html"/>
+        <reference type="text" title="chapter3 在塔什班城门口"  href="chapter7009.html"/>
+        <reference type="text" title="chapter4 沙斯塔碰上了纳尼亚人"  href="chapter7010.html"/>
+        <reference type="text" title="chapter5 科林王子"  href="chapter7011.html"/>
+        <reference type="text" title="chapter6 沙斯塔在坟场里"  href="chapter7012.html"/>
+        <reference type="text" title="chapter7 阿拉维斯在塔什班城"  href="chapter7013.html"/>
+        <reference type="text" title="chapter8 在蒂斯罗克的密室里"  href="chapter7014.html"/>
+        <reference type="text" title="chapter9 穿过大沙漠"  href="chapter7015.html"/>
+        <reference type="text" title="chapter10 南征隐士"  href="chapter7016.html"/>
+        <reference type="text" title="chapter11 不受欢迎的同路人"  href="chapter7017.html"/>
+        <reference type="text" title="chapter12 沙斯塔在纳尼亚"  href="chapter7018.html"/>
+        <reference type="text" title="chapter13 安瓦德之战"  href="chapter7019.html"/>
+        <reference type="text" title="chapter14 布里怎样变成一匹聪明的马儿"  href="chapter7020.html"/>
+        <reference type="text" title="chapter15 可笑的拉巴达什"  href="chapter7021.html"/>
+        <reference type="text" title="第六部——魔法师的外甥"  href="chapter6923.html"/>
+        <reference type="text" title="chapter1 开错的门"  href="chapter7022.html"/>
+        <reference type="text" title="chapter2 迪格雷和他的舅舅"  href="chapter7023.html"/>
+        <reference type="text" title="chapter3 各个世界之间的树林"  href="chapter7024.html"/>
+        <reference type="text" title="chapter4  钟与锤"  href="chapter7025.html"/>
+        <reference type="text" title="chapter5 灭绝咒"  href="chapter7026.html"/>
+        <reference type="text" title="chapter6 安德鲁舅舅的麻烦开始了"  href="chapter7027.html"/>
+        <reference type="text" title="chapter7 发生在前门的事"  href="chapter7028.html"/>
+        <reference type="text" title="chapter9 纳尼亚的诞生"  href="chapter7029.html"/>
+        <reference type="text" title="chapter10 第一个笑柄及其他"  href="chapter7030.html"/>
+        <reference type="text" title="chapter11 迪格雷和他的舅舅又陷困境"  href="chapter7031.html"/>
+        <reference type="text" title="chapter12 “草莓&quot;远征&quot;"  href="chapter7032.html"/>
+        <reference type="text" title="chapter13 不期而遇"  href="chapter7033.html"/>
+        <reference type="text" title="chapter14 栽树"  href="chapter7034.html"/>
+        <reference type="text" title="chapter15 这个故事的结束及其他故事的开始"  href="chapter7035.html"/>
+        <reference type="text" title="第七部——最后一战"  href="chapter6924.html"/>
+        <reference type="text" title="chapter1 大锅深渊"  href="chapter7036.html"/>
+        <reference type="text" title="chapter2 国王的鲁莽"  href="chapter7037.html"/>
+        <reference type="text" title="chapter3 无尾猿煊赫一时"  href="chapter7038.html"/>
+        <reference type="text" title="chapter4 夜里发生的事"  href="chapter7039.html"/>
+        <reference type="text" title="chapter5 救援国王"  href="chapter7040.html"/>
+        <reference type="text" title="chapter6 成功的夜袭"  href="chapter7041.html"/>
+        <reference type="text" title="chapter7 关于小矮人"  href="chapter7042.html"/>
+        <reference type="text" title="chapter8 老鹰带来的消息"  href="chapter7043.html"/>
+        <reference type="text" title="chapter9 马厩山的集会"  href="chapter7044.html"/>
+        <reference type="text" title="chapter10 谁将入马厩？"  href="chapter7045.html"/>
+        <reference type="text" title="chapter11 步伐加快了"  href="chapter7046.html"/>
+        <reference type="text" title="chapter12 穿过马厩的门      吉尔早该已经回到白石头那儿的，但她兴奋地观战时把她所接受的这一部分命令完全忘记了。现在她记了起来。她立刻转身向白石头跑去，仅仅比其他的人早到一秒钟。撤退之际，他们大家有一阵子都是背对着敌人的。他们到达白石头时便转过身来。他们的眼睛见到了一个可怕的景象。"  href="chapter7047.html"/>
+        <reference type="text" title="chapter13 小矮人的拒绝"  href="chapter7048.html"/>
+        <reference type="text" title="chapter14 黑夜笼罩纳尼亚"  href="chapter7049.html"/>
+        <reference type="text" title="chapter15 更高更深路"  href="chapter7050.html"/>
+        <reference type="text" title="chapter16 告别幻影世界"  href="chapter7051.html"/>
+
+    </guide>
+</package>

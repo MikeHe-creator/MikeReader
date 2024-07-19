@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>高级功能</title>
+</head>
+<body>
+<div id="rongqi"></div>
+<button onclick="checkButton('huizhi')">绘制</button>
+<button onclick="checkButton('xiangpi')">橡皮</button>
+<button onclick="checkButton('zhushi')">注释</button>
+<button onclick="saveasPDF()">保存</button>
+</body>
+<style>
+    #rongqi {
+        width: 800px;
+        height: 800px;
+        border: black 2px solid;
+        background-color: black;
+        overflow-y: auto;
+        position: relative; /* 确保绝对定位的子元素正确定位 */
+    }
+    body {
+        overflow-y: hidden;
+    }
+</style>
+<script>
+    const imgsrc = ['temp-QKgJt5dKFB/image_1.png', 'temp-QKgJt5dKFB/image_2.png', 'temp-QKgJt5dKFB/image_3.png', 'temp-QKgJt5dKFB/image_4.png', 'temp-QKgJt5dKFB/image_5.png', 'temp-QKgJt5dKFB/image_6.png', 'temp-QKgJt5dKFB/image_7.png'];
+    const rongqi = document.getElementById('rongqi');
+    let currentHandler = null;
+    let currentClickHandler = null;
+
+    for (const index in imgsrc) {
+        const pdfdiv = document.createElement('div');
+        pdfdiv.id = `pdfdiv${parseInt(index) + 1}`;
+        pdfdiv.style.position = 'relative';
+        const pdftuhua = document.createElement('img');
+        pdftuhua.alt = `img${parseInt(index) + 1}`;
+        pdftuhua.id = pdftuhua.alt;
+        pdftuhua.src = imgsrc[index];
+        pdftuhua.style.display = 'block';
+        pdftuhua.style.margin = '0 auto';
+        pdftuhua.style.marginBottom = '5px';
+        pdfdiv.appendChild(pdftuhua);
+
+        pdftuhua.onload = function () {
+            const pdfcanvas = document.createElement('canvas');
+            pdfcanvas.width = pdftuhua.width;
+            pdfcanvas.height = pdftuhua.height;
+            pdfcanvas.id = `canvas${parseInt(index) + 1}`;
+            pdfcanvas.style.position = 'absolute';
+            pdfdiv.appendChild(pdfcanvas);
+            rongqi.appendChild(pdfdiv);
+
+            function adjustCanvas() {
+                const marginLeft = pdftuhua.offsetLeft;
+                const marginTop = pdftuhua.offsetTop;
+                const width = pdftuhua.offsetWidth;
+                const height = pdftuhua.offsetHeight;
+
+                pdfcanvas.style.left = `${marginLeft}px`;
+                pdfcanvas.style.top = `${marginTop}px`;
+                pdfcanvas.width = width;
+                pdfcanvas.height = height;
+            }
+
+            window.addEventListener('resize', adjustCanvas);
+            adjustCanvas();
+        }
+    }
+
+    function checkButton(buttonName) {
+        if (currentHandler) {
+            document.removeEventListener('mouseover', currentHandler);
+            currentHandler = null;
+        }
+        if (currentClickHandler) {
+            document.removeEventListener('click', currentClickHandler);
+            currentClickHandler = null;
+        }
+
+        if (buttonName === 'huizhi') {
+            currentHandler = PenMouseOver;
+        } else if (buttonName === 'xiangpi') {
+            currentHandler = EraserMouseOver;
+        } else if (buttonName === 'zhushi') {
+            currentHandler = TextMouseOver;
+        }
+        if (currentHandler) {
+            document.addEventListener('mouseover', currentHandler);
+        }
+    }
+
+    let piccursor=false;
+    function PenMouseOver(event) {
+        if (event && event.target && event.target.tagName.toLowerCase() === 'canvas') {
+            const thiscanvas = event.target;
+            thiscanvas.style.cursor = 'url(cursorPen.svg), auto';
+            piccursor=true;
+            penpaint1(thiscanvas);
+        }
+    }
+
+    function EraserMouseOver(event) {
+        console.log('EraserMouseOver is running')
+        if (event && event.target && event.target.tagName.toLowerCase() === 'canvas') {
+            const thiscanvas = event.target;
+            thiscanvas.style.cursor = 'url(eraser-rusor.svg) 0 30, auto';
+            piccursor=true;
+            penpaint2(thiscanvas);
+        }
+    }
+
+    function TextMouseOver(event) {
+        console.log('TextMouseOver is running')
+        if (event && event.target && event.target.tagName.toLowerCase() === 'canvas') {
+            const thiscanvas = event.target;
+            thiscanvas.style.cursor = 'text';
+            piccursor=false;
+            thiscanvas.addEventListener('click', (event)=>textdiv(event,thiscanvas));
+        }
+    }
+
+    function penpaint1(thiscanvas) {
+        const ctx = thiscanvas.getContext('2d');
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 20;
+        ctx.globalCompositeOperation = "source-over";
+        let isDrawing = false;
+        startpaint(isDrawing, ctx, thiscanvas);
+    }
+
+    function penpaint2(thiscanvas) {
+        const ctx = thiscanvas.getContext('2d');
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.lineWidth = 20;
+        let isDrawing = false;
+        startpaint(isDrawing, ctx, thiscanvas);
+    }
+
+    function startpaint(isDrawing, ctx, thiscanvas) {
+        let lastX = 0;
+        let lastY = 0;
+        let points = [];
+
+        thiscanvas.addEventListener('mousedown', startDrawing);
+        thiscanvas.addEventListener('mousemove', draw);
+        thiscanvas.addEventListener('mouseup', stopDrawing);
+        thiscanvas.addEventListener('mouseout', stopDrawing);
+
+        function startDrawing(event) {
+            isDrawing = true;
+            points = [];
+            const { offsetX, offsetY } = event;
+            [lastX, lastY] = [offsetX, offsetY];
+            points.push({ x: offsetX, y: offsetY });
+        }
+
+        function draw(event) {
+            if (!isDrawing) return;
+            const { offsetX, offsetY } = event;
+            points.push({ x: offsetX, y: offsetY });
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            for (let i = 1; i < points.length - 2; i++) {
+                const xc = (points[i].x + points[i + 1].x) / 2;
+                const yc = (points[i].y + points[i + 1].y) / 2;
+                ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+            }
+            ctx.quadraticCurveTo(
+                points[points.length - 2].x,
+                points[points.length - 2].y,
+                points[points.length - 1].x,
+                points[points.length - 1].y
+            );
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            points = [];
+        }
+    }
+
+    //高级功能--注释
+    let pCount = 1;
+    const defaultText = 'please text here...';
+    let currentElementP = null;
+    let currentInputOprate = null;
+
+    function textdiv(event, thiscanvas) {
+        console.log('textdiv is running');
+        if (piccursor) return;
+
+        const texttarget = thiscanvas.parentNode;
+        const wenzidiv = document.createElement('div');
+        const elementP = document.createElement('p');
+        elementP.id = `comment${pCount}`;
+        elementP.className=`comentClass(${thiscanvas.id})`;
+        elementP.innerText = defaultText;
+        elementP.contentEditable = 'true';
+
+        // 获取目标元素的边界框
+        const rect = texttarget.getBoundingClientRect();
+        // 计算相对于目标元素的点击位置
+        const x = event.clientX - rect.left + texttarget.scrollLeft;
+        const y = event.clientY - rect.top + texttarget.scrollTop;
+
+        elementP.style.top = `${y}px`;
+        elementP.style.left = `${x}px`;
+        elementP.style.position = 'absolute';
+        elementP.style.zIndex = 5;
+        elementP.style.backgroundColor = 'transparent';
+        elementP.style.color = 'gray';
+        elementP.addEventListener('focus', function () {
+            if (elementP.innerText === defaultText) {
+                elementP.innerText = '';
+                elementP.style.color = 'black'; // 改变文本颜色
+            }
+        });
+        wenzidiv.appendChild(elementP);
+        pCount++;
+        texttarget.appendChild(wenzidiv);
+
+        const inputOprate = document.createElement('div');
+        inputOprate.style.position = 'absolute';
+        inputOprate.style.left = parseFloat(elementP.style.left) + 'px';
+        inputOprate.style.top = (parseFloat(elementP.style.top) - 25) + 'px';
+        inputOprate.style.backgroundColor = 'white';
+        inputOprate.style.boxShadow = '0px 0px 8px rgba(0, 0, 0, 0.2)';
+        inputOprate.style.width = '250px';
+        inputOprate.style.height = '35px';
+        createOprate(inputOprate, elementP);
+        inputOprate.id = `operate${pCount}`;
+        inputOprate.style.display = 'none';
+        wenzidiv.appendChild(inputOprate);
+        texttarget.appendChild(wenzidiv);
+        pCount++;
+
+        elementP.addEventListener('click', function (e) {
+            e.stopPropagation();
+            setEditable(elementP, inputOprate);
+        });
+
+        inputOprate.addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+
+        document.addEventListener('click', function () {
+            setUneditable(elementP, inputOprate);
+        });
+
+        function setEditable(elementP, inputOprate) {
+            if (currentElementP && currentElementP !== elementP) {
+                setUneditable(currentElementP, currentInputOprate);
+            }
+            elementP.contentEditable = 'true';
+            elementP.focus();
+            inputOprate.style.display = 'block';
+            currentElementP = elementP;
+            currentInputOprate = inputOprate;
+        }
+
+        function setUneditable(elementP, inputOprate) {
+            elementP.contentEditable = 'false';
+            inputOprate.style.display = 'none';
+        }
+    }
+
+    function createOprate(inputOprate, elementP) {
+        const fontstyle = document.createElement('select');
+        fontstyle.name = 'fontstyle';
+        const option1 = document.createElement('option');
+        option1.text = 'normal';
+        option1.value = 'normal';
+        fontstyle.appendChild(option1);
+        const option2 = document.createElement('option');
+        option2.text = 'Italic';
+        option2.value = 'Italic';
+        fontstyle.appendChild(option2);
+        fontstyle.style.marginLeft = '5px';
+        fontstyle.style.marginTop = '3px';
+        fontstyle.style.border = 'none';
+        inputOprate.appendChild(fontstyle);
+
+        const fontsize = document.createElement('input');
+        fontsize.type = 'number';
+        fontsize.min = 4;
+        fontsize.max = 70;
+        fontsize.value = 11;
+        fontsize.style.width = '45px';
+        fontsize.style.marginLeft = '5px';
+        fontsize.style.marginTop = '3px';
+        fontsize.style.border = 'none';
+        inputOprate.appendChild(fontsize);
+
+        const fontcolor = document.createElement("input");
+        fontcolor.type = 'color';
+        fontcolor.style.marginLeft = '8px';
+        fontcolor.style.marginTop = '3px';
+        fontcolor.style.border = 'none';
+        inputOprate.appendChild(fontcolor);
+
+        const buttond = document.createElement('button');
+        const buttoni = document.createElement('img');
+        buttoni.alt = 'delete';
+        buttoni.src = 'rubbish-bin.svg'
+        buttoni.width = 20;
+        buttoni.height = 20;
+        buttond.appendChild(buttoni);
+        buttond.style.marginLeft = '5px';
+        buttond.style.marginTop = '3px';
+        buttond.style.border = 'none';
+        inputOprate.appendChild(buttond);
+
+        buttond.addEventListener('click', function () {inputOprate.parentNode.remove();});
+        fontstyle.addEventListener('change', function () {elementP.style.fontStyle = fontstyle.value;});
+        fontcolor.addEventListener('change', function () {elementP.style.color = fontcolor.value;});
+        fontsize.addEventListener('change', function () {elementP.style.fontSize = fontsize.value + 'px';});
+    }
+
+    function saveasPDF(){
+        const allps = document.querySelectorAll("p");
+        allps.forEach(function(element) {
+            if (element.id.includes("comment")) {
+                const textE = document.getElementById(element.id);
+                const textstyle = window.getComputedStyle(textE);
+                const fontStyle = textstyle.font;
+                const textColor = textstyle.color;
+                const left = parseFloat(textstyle.left);
+                const top = parseFloat(textstyle.top);
+                const canvasInfo = element.className.match(/\(([^)]+)\)/)[1];
+                const textcanvas = document.getElementById(canvasInfo);
+                const ctx = textcanvas.getContext('2d');
+                const canvasRect = textcanvas.getBoundingClientRect();
+                const adjustedLeft = left - canvasRect.left;
+                const adjustedTop = top - canvasRect.top;
+                ctx.font = fontStyle;
+                ctx.fillStyle = textColor;
+                console.log('textE.textContent',textE.textContent)
+                console.log('(adjustedLeft, adjustedTop+60)',adjustedLeft,adjustedTop+60)
+                ctx.fillText(textE.textContent, adjustedLeft, adjustedTop+60);
+            }
+        });
+    }
+</script>
+</html>

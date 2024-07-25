@@ -99,7 +99,6 @@ def refercontent(filepath, upload_folder):
                 image_files.append(target_path)
             else:
                 continue
-
             os.makedirs(os.path.dirname(target_path), exist_ok=True)
             with z.open(file_name) as source_file:
                 with open(target_path, 'wb') as target_file:

@@ -182,7 +182,7 @@ function cleantemp(){
         console.log('Temp folder deleted:', response.data);
       })
       .catch(error => {
-        console.error('Error deleting temp folder:', error);
+        console.error('Error deleting temp.html folder:', error);
       });
 }
 

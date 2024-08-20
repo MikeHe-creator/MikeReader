@@ -26,7 +26,7 @@ def createTEMP(getpdfs):
     base_path = app.config['UPLOAD_FOLDER']
     letters = string.ascii_letters + string.digits
     random_name = ''.join(random.choice(letters) for i in range(10))
-    upload_folder = os.path.join(base_path, 'temp-' + random_name)
+    upload_folder = os.path.join(base_path, 'temp.html-' + random_name)
     os.makedirs(upload_folder, exist_ok=True) #创建路径
     filepath = os.path.join(upload_folder, getpdfs.filename)
     getpdfs.save(filepath)
@@ -104,7 +104,7 @@ def combineNotes(getnotes):
     return pdfsave(doc)
 
 def pdfsave(doc):
-    save_path = os.path.join(upload_folder, 'temp-finished.pdf')
+    save_path = os.path.join(upload_folder, 'temp.html-finished.pdf')
     doc.save(save_path)
     doc.close()
     return save_path

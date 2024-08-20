@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>分页与切换</title>
+</head>
+<body>
+<h1>分页与切换</h1>
+<div id="fameroom"></div>
+<div id="pages">
+    <button onclick="changePage(-2)">上一页</button>
+    <p id="currentPage" min="1" >1</p><p>/</p><p id="ttpages"></p>
+    <button onclick="changePage(2)">下一页</button>
+</div>
+</body>
+<style>
+    h1{
+        background-color: chocolate;
+    }
+    #fameroom{
+        overflow-wrap: break-word;
+        height: 790px;
+    }
+    #pages {
+        display: flex;            /* 设为 Flexbox 容器 */
+        flex-direction: row;      /* 子元素按行排列 */
+        justify-content: center;  /* 水平方向居中对齐 */
+    }
+    #pages p {
+        margin: 0; /* 去掉默认的上下边距 */
+    }
+</style>
+<script>
+    const fameroom = document.getElementById('fameroom');
+    const htmlFiles = [
+        'cailiao/cl1.html',
+        'cailiao/cl2.html',
+        'cailiao/cl3.html',
+        'cailiao/cl4.html',
+        'cailiao/cl5.html',
+        'cailiao/cl6.html',
+        'cailiao/cl7.html',
+        'cailiao/cl8.html',
+    ];
+
+    let percolumn=[];
+    async function loadFrames(columnWidth, newfameWidth){
+        const promises = htmlFiles.map(async (file, index) => {
+            const newfame = document.createElement('iframe');
+            newfame.id = file.split('\\').pop().split('/').pop().replace('.html', '');
+            newfame.height = '780';
+            newfame.width = `${window.innerWidth*0.95}`
+            fameroom.appendChild(newfame);
+            const iframeDoc = newfame.contentDocument || newfame.contentWindow.document;
+            iframeDoc.open();
+            iframeDoc.write(
+                `<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="ja">
+            <head>
+                <style>
+                    body {
+                        width: ${newfameWidth}px;
+                        height: 780px;
+                        overflow: hidden;
+                        margin: 0px !important;
+                        padding: 20px 68px;
+                        box-sizing: border-box;
+                        max-width: inherit;
+                        column-fill: auto;
+                        column-gap: 136px;
+                        column-width: ${columnWidth}px;
+                        color: rgb(63, 72, 74);
+                    }
+                </style>
+            </head>
+            <body id="bkcontent" class="vrtl"></body>
+            </html>`
+            );
+            iframeDoc.close();
+            await dealcontent(file, iframeDoc, newfame);
+            dealcolumn(iframeDoc, newfame,columnWidth)
+        });
+
+        await Promise.all(promises);
+    }
+
+    async function dealcontent(file, iframeDoc, newfame) {
+        const response = await fetch(file);
+        const htmlContent = await response.text();
+        const div = iframeDoc.createElement('div');
+        div.id = 'shenti';
+        div.innerHTML = htmlContent;
+        iframeDoc.body.appendChild(div);
+    }
+
+    function updateIframesWidth() {
+        const windowsize = window.innerWidth;
+        const newfameWidth = windowsize * 0.95;
+        //console.log('newfameWidth:', newfameWidth);
+
+        let columnWidth;
+        if (newfameWidth<900){
+            columnWidth=newfameWidth
+        }else{
+            const padding = 68 * 2;
+            const columnGap = 136;
+            const contentWidth = newfameWidth - padding - columnGap;
+            columnWidth = contentWidth * 0.5;
+            console.log('columnWidth:',columnWidth)
+        }
+        //console.log('columnWidth:', columnWidth);
+        document.querySelectorAll('iframe').forEach(iframe => {
+            iframe.style.width = newfameWidth + 'px';
+            // 动态更新 iframe 内部 body 的宽度和 column-width
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            const body = iframeDoc.querySelector('body');
+            if (body) {
+                body.style.width = `${newfameWidth}px`
+                body.style.columnWidth = `${columnWidth}px`;
+            }
+        });
+        loadFrames(columnWidth, newfameWidth);
+    }
+
+    function dealcolumn(iframeDoc,newfame,columnWidth){
+        const originalDisplay = newfame.style.display;
+        newfame.style.display = 'block';
+        const shenti = iframeDoc.getElementById('shenti');
+        const shentiStyle = iframeDoc.defaultView.getComputedStyle(shenti);
+        const shentiHeight = parseFloat(shentiStyle.height);
+        let totalColumn = shentiHeight / (columnWidth+136);
+        console.log('totalColumn1',totalColumn)
+        totalColumn = Math.max(Math.floor(totalColumn),1);
+        percolumn.push(totalColumn);
+        newfame.style.display = originalDisplay;
+        calculateTotalPage();
+    }
+
+    let pageDict = {};
+    function calculateTotalPage() {
+        console.log('percolumn:',percolumn)
+        const ttpages = document.getElementById('ttpages');
+        //ttpages.innerHTML = percolumn.reduce((sum, column) => sum + column, 0);
+        let currentPage = 1;
+        for (let i = 0; i < percolumn.length; i++) {
+            const iframeId = `cl${i + 1}`;
+            pageDict[iframeId] = currentPage;
+            if (window.innerWidth*0.95>=900 && percolumn[i]%2!==0){
+                const wantadd=percolumn[i]+1;
+                currentPage+=wantadd
+            }else{
+                currentPage += percolumn[i];
+            }
+        }
+        console.log('pageDict:', pageDict);
+        const lastArr = percolumn[percolumn.length - 1];
+        const lastDict = Object.values(pageDict)[Object.values(pageDict).length - 1];
+        ttpages.innerHTML = lastArr+lastDict
+        if(percolumn.length===htmlFiles.length){
+            percolumn = [];
+        }
+        const iframes = document.querySelectorAll('iframe');
+        iframes.forEach(iframe => {
+            if (iframe.id !== 'cl1') {
+                iframe.style.display = 'none';
+            }
+        });
+    }
+
+
+    function changePage(step) {
+        const currentPage = document.getElementById('currentPage');
+        let currentPage2 = parseInt(currentPage.textContent) || 1;
+        currentPage2 += step;
+        currentPage.innerHTML = currentPage2;
+        let closestKey = null;
+        let minDiff = Infinity;
+        let maxKey = null;
+        let maxValue = -Infinity;
+        for (const clkey in pageDict) {
+            const pageValue = pageDict[clkey];
+            if (pageValue > maxValue) {
+                maxValue = pageValue;
+                maxKey = clkey;
+            }
+            if (pageValue > currentPage2) {
+                let diff = pageValue - currentPage2;
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    closestKey = clkey;
+                }
+            }
+        }
+        let clkeynum ;
+        if (!closestKey) {
+            closestKey = maxKey;
+            clkeynum = closestKey.match(/\d+/)[0]
+        }else{
+            clkeynum = closestKey.match(/\d+/)[0]
+            clkeynum = clkeynum - 1;
+            closestKey = 'cl' + clkeynum;
+        }
+        console.log('clkeynum:',clkeynum)
+        const clkey2 = document.getElementById(closestKey);
+        console.log('clkey2:', clkey2);
+        if (clkey2.style.display === 'block') {
+            const shenti = clkey2.contentDocument.getElementById('shenti');
+            console.log('shenti:', shenti);
+            const currentTransform = shenti.style.transform;
+            let translateX = 0;
+            if (currentTransform && currentTransform.includes('translateX')) {
+                translateX = parseFloat(currentTransform.match(/translateX\((-?\d+(\.\d+)?)px\)/)[1]);
+            }
+            const pageWidth = clkey2.contentWindow.innerWidth;
+            translateX += (step > 0 ? -pageWidth : pageWidth);
+            shenti.style.transform = `translateX(${translateX}px)`;
+            console.log(`当前 translateX: ${translateX}px`);
+        } else {
+            clkey2.style.display = 'block';
+            for (const clkey in pageDict) {
+                let otherClKeyNum = clkey.match(/\d+/)[0];
+                if (`cl${otherClKeyNum}` !== `cl${clkeynum}`) {
+                    const otherElement = document.getElementById(`cl${otherClKeyNum}`);
+                    if (otherElement) {
+                        otherElement.style.display = 'none';
+                    }
+                }
+            }
+        }
+    }
+
+    window.addEventListener('resize', updateIframesWidth);
+    updateIframesWidth();
+</script>
+
+</html>

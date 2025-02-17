@@ -3,7 +3,7 @@ import Zhuce from "@/app/components/zhuce";
 import ReDopassword from "@/app/components/ReDopassword";
 import {useState} from "react";
 
-export default function (){
+export default function ProfileLogin (){
 const [FanMmark,setFanMmark]=useState("Denglu");
 
     return(

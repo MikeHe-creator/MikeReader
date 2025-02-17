@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.5'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.mikelearner'
+version = '0.0.1-SNAPSHOT'
+
+java {
+
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(23)
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://maven.openkm.com/" }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.apache.pdfbox:pdfbox:2.0.27'
+    implementation 'org.apache.pdfbox:pdfbox-tools:2.0.27'
+    implementation 'org.apache.pdfbox:jbig2-imageio:3.0.4'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
+    implementation('nl.siegmann.epublib:epublib-core:3.1') {
+        exclude group: 'org.slf4j', module: 'slf4j-simple'
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+    implementation 'org.jaudiotagger:jaudiotagger:2.0.1'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

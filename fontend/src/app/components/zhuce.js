@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-export default function zhuce({setFanMmark}) {
+export default function Zhuce({setFanMmark}) {
     const [shouldNext, setShouldNext] =useState(false);
     const [isEmailValid, setIsEmailValid] = useState(true);
     const [isPasswordValid, setIsPasswordValid] = useState(true);

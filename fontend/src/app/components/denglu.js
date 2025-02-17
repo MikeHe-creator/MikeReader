@@ -1,4 +1,4 @@
-export default function ({setFanMmark}){
+export default function Denglu ({setFanMmark}){
     return (
         <>
             <div>
